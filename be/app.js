@@ -4,11 +4,8 @@ const Menu = require('./models/menu');
 
 const app = express();
 
+app.use(express.json());
 app.use('/', require('./routes/index'))
-
-app.listen(3000, function () {
-  console.log('School-Meal-Insects app listening on port 3000!');
-});
 
 mongoose.set('useCreateIndex', true);
 mongoose.connect('mongodb://localhost:27017/menu', {useNewUrlParser: true}, (err) => {
@@ -46,3 +43,5 @@ mongoose.connect('mongodb://localhost:27017/menu', {useNewUrlParser: true}, (err
   //     .catch(e => console.error(e))
 
 })
+
+module.exports = app;
