@@ -3,34 +3,22 @@ const Menu = require('../../models/menu');
 
 const router = express.Router();
 
+router.get('/', function(req, res, next) {
+    Menu.find().select({'_id': false, '__v': false}).then(r => {
+        res.send({'menus': r});
+    })
+})
+
 router.get('/:menuName', function(req, res, next) {
-    Menu.findOne({'name': req.params.menuName}).then(r => {
-        res.send({
-            'name': r.name,
-            'like': r.like,
-            'dislike': r.dislike
-        });
+    Menu.findOne({'name': req.params.menuName}).select({'_id': false, '__v': false}).then(r => {
+        res.send(r);
     });
 });
 
 router.post('/:menuName', function(req, res, next) {
-    console.log(req.params.menuName);
-    console.log(req.body);
-
-    res.send({'msg': 'hi'});
-
-    // var body = req.body;
-    
-    // if (body.order === 'like') {
-    //     console.log('like');
-    // }
-    // else if (body.order === 'dislike') {
-    //     console.log('dislike');
-    // }
-
-    // Menu.updateOne({'name': req.params.menuName}, {$set: }).then(r => {
-    //     console.log(r);
-    // })
+    Menu.updateOne({'name': req.params.menuName}, {'$inc': {[req.body.order]: 1}}).then(r => {
+        res.send({'success': Boolean(r.nModified)});
+    })
 })
 
 module.exports = router;

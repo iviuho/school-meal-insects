@@ -1,9 +1,12 @@
+const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
+
 const Menu = require('./models/menu');
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use('/', require('./routes/index'))
 
