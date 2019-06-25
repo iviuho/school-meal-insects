@@ -4,9 +4,7 @@ import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
 import axios from 'axios'
-
 
 import 'chart.js'
 import 'hchs-vue-charts'
@@ -17,9 +15,6 @@ Vue.prototype.$http = axios
 
 Vue.use(window.VueCharts)
 Vue.use(VueChartkick, { Chartkick })
-
-
-
 
 Vue.config.productionTip = false
 
