@@ -2,12 +2,12 @@
   <v-container fluid>
     <v-slide-y-transition mode="out-in">
       <v-layout column align-center>
-        <img src="@/assets/logo.png" alt="Vuetify.js" class="mb-5">
+        <img src="@/assets/gsm_logo1.png" width="320" height="240">
         <blockquote>
-          &#8220;First, solve the problem. Then, write the code.&#8221;
+          "오늘 먹을 것을 내일로 미루지 마라."
           <footer>
             <small>
-              <em>&mdash;John Johnson</em>
+              <em>- Hwarang Choi</em>
             </small>
           </footer>
         </blockquote>

@@ -24,12 +24,12 @@ export default new Router({
     {
       path: '/search',
       name: 'search',
-      component:() => import('./views/Search.vue')
+      component: () => import('./views/Search.vue')
     },
     {
       path: '/graph',
       name: 'graph',
-      component:() => import('./views/graph.vue')
+      component: () => import('./views/graph.vue')
     },
     {
       path: '/meal',
