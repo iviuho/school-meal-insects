@@ -20,7 +20,6 @@ export default {
   mounted () {
     this.$http.get('http://localhost:3000/ranking').then(r => {
       r.data.data.forEach(item => {
-        console.log(item)
         this.chartData.push([item.name, item.like])
       })
     })
