@@ -1,8 +1,7 @@
 <template>
   <v-app>
-    <v-content>
-      <v-navigation-drawer permanent>
-        <v-toolbar>
+      <v-navigation-drawer permanent app>
+        <v-toolbar flat>
           <v-list>
             <v-list-tile>
               <v-list-tile-title class="title">
@@ -30,6 +29,8 @@
           </v-list-tile>
         </v-list>
       </v-navigation-drawer>
+    <v-content>
+      <router-view/>
     </v-content>
   </v-app>
 </template>
