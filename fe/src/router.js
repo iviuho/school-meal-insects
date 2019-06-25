@@ -40,6 +40,12 @@ export default new Router({
       path: '/ranking',
       name: 'ranking',
       component: () => import('./views/ranking.vue')
+    },
+    {
+      path: '/menu/:id',
+      name: 'menu',
+      props: true,
+      component: () => import('./views/menu.vue')
     }
   ]
 })
