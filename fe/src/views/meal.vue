@@ -4,7 +4,7 @@
   <v-layout wrap align-center>
     <v-flex xs12 sm6 md4>
       <v-card>
-        <v-card-title primary-title v-for="breakfs in breakfast">
+        <v-card-title primary-title v-for="breakfs in breakfast" v-bind:key="breakfs">
           <div>
             <h3 @click="test(breakfs)" >{{breakfs}}</h3>
             <v-btn flat icon @click="postReq(breakfs, 'like')">
@@ -18,10 +18,9 @@
       </v-card>
     </v-flex>
   </v-layout>
-
 </v-container>
-</template>
 
+</template>
 <script>
 import router from "../router"
 
@@ -39,7 +38,7 @@ export default {
   methods: {
     getUsers () {
       // using JSONPlaceholder
-      const baseURI = 'http://10.120.73.216:3000/meal';
+      const baseURI = 'http://localhost:3000/meal';
       this.$http.get(`${baseURI}`)
       .then((result) => {
         console.log(result)
@@ -57,10 +56,10 @@ export default {
       })
     },
     test(menu) {
-      this.$router.push('menu/'+menu)
+      this.$router.push(`menu/${menu}`)
     },
     postReq(name, order) {
-      const baseURI = 'http://10.120.73.216:3000/menu/';
+      const baseURI = 'http://localhost:3000/menu/';
       this.$http.post(`${baseURI + name}`, {
         order: order
       })
