@@ -35,6 +35,11 @@ export default new Router({
       path: '/meal',
       name: 'meal',
       component: () => import('./views/meal.vue')
+    },
+    {
+      path: '/ranking',
+      name: 'ranking',
+      component: () => import('./views/ranking.vue')
     }
   ]
 })
