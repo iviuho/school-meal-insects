@@ -1,5 +1,5 @@
 const express = require('express');
-const Menu = require('../../models/menu');
+const Menu = require('../../models/menu').menuSchema;
 const School = require('node-school-kr');
 
 const router = express.Router();
@@ -13,9 +13,11 @@ router.get('/', async function(req, res, next) {
     var date = new Date().toLocaleDateString().split("-");
     var [year, month, day] = date;
 
+    // 이미 오늘 급식 조회를 한 이후라서 데이터를 보관중 일 때
     if (today_menu.hasOwnProperty(day)) {
         result = today_menu[day];
     }
+    // 오늘 급식이 보관되어 있지 않을 때
     else {
         result = await parseMeal();
         await addToDB(result);
@@ -70,19 +72,28 @@ const parseMeal = async function() {
 }
 
 const addToDB = async function(data) {
-    keys = Object.keys(data);
+    var date = new Date().toLocaleDateString();
 
-    keys.forEach(key => {
+    for (var key in data) {
         data[key].forEach(element => {
             Menu.find({'name': element})
             .then(r => {
                 if (r.length === 0) {
-                    Menu.create({'name': element})
-                    .then(r => console.log(`${element} was added to MongoDB.`))
+                    Menu.create({'name': element, 'frequency': [date]})
+                    .then(result => console.log(`${element} was added to MongoDB.`))
+                    .catch(error => {});
                 }
-            });
-        });
-    });
+                else {
+                    if (r[0]['frequency'].find(e => {return (e === date)}) === undefined) {
+                        Menu.updateOne({'name': element}, {'$push': {"frequency": date}})
+                        .then(result => console.log(`${element} was updated today's date.`))
+                        .catch(error => {});
+                    }
+                }
+            })
+            .catch(e => console.error(e));
+        })
+    }
 }
 
 module.exports = router;

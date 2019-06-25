@@ -2,7 +2,7 @@ const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 
-const Menu = require('./models/menu');
+const Menu = require('./models/menu').menuSchema;
 
 const app = express();
 

@@ -1,22 +1,38 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+
+const commentSchema = new mongoose.Schema(
+    {
+        'author': String,
+        'content': String,
+        'date': {
+            type: Date,
+            default: Date.now()
+        }
+    }
+);
 
 const menuSchema = new mongoose.Schema(
     {
-        name: {
+        'name': {
             type: String,
             required: true,
             unique: true,
             index: true
         },
-        like: {
+        'like': {
             type: Number,
             default: 0
         },
-        dislike: {
+        'dislike': {
             type: Number,
             default: 0
-        }
+        },
+        'frequency': [String],
+        'comments': [commentSchema]
     }
 );
 
-module.exports = mongoose.model("Menu", menuSchema);;
+module.exports = {
+    'commentSchema': mongoose.model("Comment", commentSchema),
+    'menuSchema': mongoose.model("Menu", menuSchema)
+};
