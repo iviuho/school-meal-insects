@@ -158,9 +158,9 @@ export default {
   props: ['id'],
   data () {
     return {
-        like: 0,
-        dislike: 0,
-        date: []
+      like: 0,
+      dislike: 0,
+      date: []
     }
   },
   mounted () {
