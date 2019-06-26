@@ -1,12 +1,14 @@
 <template>
     <div>
        {{ id }}
-       ss
-       scriptss
-
-       sss
-       s
-
+       <br>
+        {{like}}
+        <br>
+        {{dislike}}
+        <br>
+        <v-container v-for="dates in date" v-bind:key="dates">
+            <div>{{dates}}</div>
+        </v-container>
     </div>
 </template>
 
@@ -17,8 +19,9 @@ export default {
   props: ['id'],
   data () {
     return {
-      like: 0,
-      dislike: 0
+        like: 0,
+        dislike: 0,
+        date: []
     }
   },
   mounted () {
@@ -35,6 +38,7 @@ export default {
           console.log(this.like)
           this.dislike = r.data.dislike
           console.log(this.dislike)
+          this.date = r.data.frequency
         })
         .catch((e) => {
           console.error(e.message)
