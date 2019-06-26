@@ -34,13 +34,18 @@ export default new Router({
     {
       path: '/meal',
       name: 'meal',
-      component:() => import('./views/meal.vue')
+      component: () => import('./views/meal.vue')
+    },
+    {
+      path: '/ranking',
+      name: 'ranking',
+      component: () => import('./views/ranking.vue')
     },
     {
       path: '/menu/:id',
       name: 'menu',
       props: true,
-      component:() => import('./views/menu.vue')
+      component: () => import('./views/menu.vue')
     }
   ]
 })

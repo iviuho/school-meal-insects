@@ -48,25 +48,25 @@
 
 </template>
 <script>
-import router from "../router"
+// import router from '../router'
 
 export default {
-  data: function () {
+  data () {
     return {
       posts: [],
       breakfast: [],
       lunch: [],
       dinner: [],
       leng: 0
-      }
-    },
-  mounted() {
+    }
+  },
+  mounted () {
     this.getUsers()
   },
   methods: {
     getUsers () {
       // using JSONPlaceholder
-      const baseURI = 'http://localhost:3000/meal';
+      const baseURI = 'http://localhost:3000/meal'
       this.$http.get(`${baseURI}`)
       .then((result) => {
         console.log(result)
@@ -85,20 +85,20 @@ export default {
         console.error(e.message)
       })
     },
-    test(menu) {
+    test (menu) {
       this.$router.push(`menu/${menu}`)
     },
-    postReq(name, order) {
-      const baseURI = 'http://localhost:3000/menu/';
+    postReq (name, order) {
+      const baseURI = 'http://localhost:3000/menu/'
       this.$http.post(`${baseURI + name}`, {
         order: order
       })
-      .then((r) => {
-        console.log("성공")
-      })
-      .catch((e) => {
-        console.error(e.message)
-      })
+        .then((r) => {
+          console.log('성공')
+        })
+        .catch((e) => {
+          console.error(e.message)
+        })
     }
   }
 }
