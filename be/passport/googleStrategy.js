@@ -1,8 +1,9 @@
 const passport = require("passport");
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+require("dotenv").config();
 
-var GOOGLE_CLIENT_ID = "945992092243-4nr84drg218d8l795mkb84qs2sv7j640.apps.googleusercontent.com";
-var GOOGLE_CLIENT_SECRET = "zkgOLL9dJvWQIp4NYCSfGGtR";
+var GOOGLE_CLIENT_ID = process.env.CLIENT_ID;
+var GOOGLE_CLIENT_SECRET = process.env.CLIENT_SECRET;
 
 module.exports = () => {
     passport.serializeUser((user, done) => {
