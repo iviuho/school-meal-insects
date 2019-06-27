@@ -25,7 +25,7 @@
       <p><strong> &nbsp;&nbsp;{{dislike}}</strong></p>
     </v-flex>
   <v-timeline>
-    
+
     <v-timeline-item v-for="dates in date" v-bind:key="dates"
       color="purple lighten-2"
       fill-dot
@@ -36,7 +36,7 @@
         </v-card-title>
       </v-card>
     </v-timeline-item>
-    
+
     <!-- <v-timeline-item
       color="amber lighten-1"
       fill-dot

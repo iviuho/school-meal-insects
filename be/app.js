@@ -27,11 +27,11 @@ app.use(
   session({
     resave: false,
     saveUninitialized: false,
-    secret: "",
+    secret: "ddddd",
     cookie: {
       httpOnly: true,
       secure: false
-    }
+    } 
   })
 );
 app.use(passport.initialize());

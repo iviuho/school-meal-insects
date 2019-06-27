@@ -1,54 +1,49 @@
-
 <template>
-<v-container fluid grid-list-xl>
-  <v-layout wrap>
-    <v-flex xs12 sm6 md4>
-      <v-card class="rounded-card" v-for="breakfs in breakfast" v-bind:key="breakfs">
-        <v-card-title class="justify-center" @click="test(breakfs)" primary-title>
-            <h3>{{breakfs}}</h3>
-        </v-card-title>
-        <v-card-actions class="justify-center">
-          <v-btn icon @click="postReq(breakfs, 'like')">
-            <v-icon>thumb_up</v-icon>
-          </v-btn>
-          <v-btn icon @click="postReq(breakfs, 'dislike')">
-            <v-icon>thumb_down</v-icon>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-    <v-flex xs12 sm6 md4>
-      <v-card class="rounded-card" v-for="lun in lunch" v-bind:key="lun">
-        <v-card-title class="justify-center" @click="test(lun)" primary-title>
-            <h3>{{lun}}</h3>
-        </v-card-title>
-        <v-card-actions class="justify-center">
-          <v-btn icon @click="postReq(lun, 'like')">
-            <v-icon>thumb_up</v-icon>
-          </v-btn>
-          <v-btn icon @click="postReq(lun, 'dislike')">
-            <v-icon>thumb_down</v-icon>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-    <v-flex xs12 sm6 md4>
-      <v-card class="rounded-card" v-for="din in dinner" v-bind:key="din">
-        <v-card-title class="justify-center" @click="test(din)" primary-title>
-            <h3>{{din}}</h3>
-        </v-card-title>
-        <v-card-actions class="justify-center">
-          <v-btn icon @click="postReq(din, 'like')">
-            <v-icon>thumb_up</v-icon>
-          </v-btn>
-          <v-btn icon @click="postReq(din, 'dislike')">
-            <v-icon>thumb_down</v-icon>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
-</v-container>
+  <v-container fluid>
+    <v-layout align-center column>
+      <v-item-group
+        v-model="window"
+        class="shrink mr-4"
+        mandatory
+        tag="v-flex"
+      >
+        <v-item
+          v-for="n in items"
+          :key="n"
+          style="display: inline-block;"
+        >
+          <div slot-scope="{ active, toggle }">
+            <v-btn :input-value="active" @click="toggle">{{n}}</v-btn>
+          </div>
+        </v-item>
+      </v-item-group>
+
+      <v-flex>
+        <v-window
+          v-model="window"
+          class="elevation-1"
+        >
+          <v-window-item v-for="i in items" :key="i">
+            <v-container column fluid>
+              <v-card class="rounded-card" v-for="menu in menus[i]" v-bind:key="menu">
+                <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
+                    <h3>{{menu}}</h3>
+                </v-card-title>
+                <v-card-actions class="justify-center">
+                  <v-btn icon @click="postReq(menu, 'like')">
+                    <v-icon>thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn icon @click="postReq(menu, 'dislike')">
+                    <v-icon>thumb_down</v-icon>
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-container>
+          </v-window-item>
+        </v-window>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -56,10 +51,14 @@ export default {
   data () {
     return {
       posts: [],
-      breakfast: [],
-      lunch: [],
-      dinner: [],
-      leng: 0
+      menus: {
+        '아침': [],
+        '점심': [],
+        '저녁': []
+      },
+      leng: 0,
+      items: ['아침', '점심', '저녁'],
+      window: 0
     }
   },
   mounted () {
@@ -71,23 +70,18 @@ export default {
       const baseURI = 'http://localhost:3000/meal'
       this.$http.get(`${baseURI}`)
         .then((result) => {
-          console.log(result)
-          console.log(result.data.data)
-          console.log(result.data.data.breakfast)
           this.posts = result.data
-          console.log(this.posts.data.breakfast)
-          console.log(this.posts)
-          console.log(this.posts.data.breakfast.length)
+
           this.leng = this.posts.data.breakfast.length
-          this.breakfast = this.posts.data.breakfast
-          this.lunch = this.posts.data.lunch
-          this.dinner = this.posts.data.dinner
+          this.menus['아침'] = this.posts.data.breakfast
+          this.menus['점심'] = this.posts.data.lunch
+          this.menus['저녁'] = this.posts.data.dinner
         })
         .catch((e) => {
           console.error(e.message)
         })
     },
-    test (menu) {
+    moveTo (menu) {
       this.$router.push(`menu/${menu}`)
     },
     postReq (name, order) {
