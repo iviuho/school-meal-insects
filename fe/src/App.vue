@@ -3,7 +3,7 @@
       <v-navigation-drawer permanent app>
         <v-toolbar flat>
           <v-list>
-            <v-list-tile>
+            <v-list-tile @click="goHome">
               <v-list-tile-title class="title">
                 급식충들 모여라
               </v-list-tile-title>
@@ -52,6 +52,11 @@ export default {
           to: '/ranking'
         }
       ]
+    }
+  },
+  methods: {
+    goHome () {
+      this.$router.push('/')
     }
   }
 }
