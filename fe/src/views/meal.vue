@@ -1,17 +1,8 @@
 <template>
   <v-container fluid>
     <v-layout align-center column>
-      <v-item-group
-        v-model="window"
-        class="shrink mr-4"
-        mandatory
-        tag="v-flex"
-      >
-        <v-item
-          v-for="n in items"
-          :key="n"
-          style="display: inline-block;"
-        >
+      <v-item-group v-model="window" class="shrink mr-4" mandatory tag="v-flex">
+        <v-item v-for="n in items" :key="n" style="display: inline-block;" >
           <div slot-scope="{ active, toggle }">
             <v-btn :input-value="active" @click="toggle">{{n}}</v-btn>
           </div>
@@ -19,10 +10,7 @@
       </v-item-group>
 
       <v-flex>
-        <v-window
-          v-model="window"
-          class="elevation-1"
-        >
+        <v-window v-model="window" class="elevation-1">
           <v-window-item v-for="i in items" :key="i">
             <v-container column fluid>
               <v-card class="rounded-card" v-for="menu in menus[i]" v-bind:key="menu">
