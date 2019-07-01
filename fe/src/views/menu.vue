@@ -1,27 +1,17 @@
 <template>
-  <!-- <div>
-    <v-card>
-      <v-responsive :aspect-ratio="16/9">
-        <v-card-title>
-          <h1>{{id}}</h1>
-        </v-card-title>
-        <v-card-text v-for="dates in date" v-bind:key="dates">
-          {{like}}
-          {{dislike}}
-          {{id}}
-          {{dates}}
-        </v-card-text>
-      </v-responsive>
-    </v-card>
-  </div> -->
-  <v-container>
+  <v-layout justify-space-around>
     <v-flex>
-      <h4>{{id}}</h4>
-      <h1>like</h1>
-      <v-icon size="64" color="yellow">thumb_up</v-icon>
-      <h1>dislike</h1>
-      <v-icon size="64" color="yellow">thumb_down</v-icon>
-      <p><strong> &nbsp;&nbsp;{{dislike}}</strong></p>
+      <div class="column">
+        <div>
+        <h4>{{id}}</h4>
+        <h1>like</h1>
+        <v-icon size="64">thumb_up</v-icon>
+        <p><strong> &nbsp;&nbsp;{{like}}</strong></p>
+        <h1>dislike</h1>
+        <v-icon size="64">thumb_down</v-icon>
+        <p><strong> &nbsp;&nbsp;{{dislike}}</strong></p>
+        </div>
+      </div>
     </v-flex>
   <v-timeline>
 
@@ -36,82 +26,8 @@
       </v-card>
     </v-timeline-item>
 
-    <!-- <v-timeline-item
-      color="amber lighten-1"
-      fill-dot
-      left
-      small
-    >
-      <v-card>
-        <v-card-title class="amber lighten-1 justify-end">
-          <h2 class="display-1 mr-3 white--text font-weight-light">Title 2</h2>
-          <v-icon
-            dark
-            size="42"
-          >mdi-home-outline</v-icon>
-        </v-card-title>
-        <v-container>
-          <v-layout>
-            <v-flex xs8>
-              Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit.
-            </v-flex>
-            <v-flex xs4>
-              Lorem ipsum dolor sit amet, no nam oblique veritus.
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card>
-    </v-timeline-item>
-
-    <v-timeline-item
-      color="cyan lighten-1"
-      fill-dot
-      right
-    >
-      <v-card>
-        <v-card-title class="cyan lighten-1">
-          <v-icon
-            class="mr-3"
-            dark
-            size="42"
-          >
-            mdi-email-outline
-          </v-icon>
-          <h2 class="display-1 white--text font-weight-light">Title 3</h2>
-        </v-card-title>
-        <v-container>
-          <v-layout>
-            <v-flex
-              v-for="n in 3"
-              :key="n"
-              xs4
-            >
-              Lorem ipsum dolor sit amet, no nam oblique veritus no nam oblique.
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card>
-    </v-timeline-item>
-
-    <v-list-item two-line>
-      <v-list-item-content>
-        <v-list-item-title>Two-line item</v-list-item-title>
-        <v-list-item-subtitle>Secondary text</v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
-
-    <v-list-item three-line>
-      <v-list-item-content>
-        <v-list-item-title>Three-line item</v-list-item-title>
-        <v-list-item-subtitle>
-          Secondary line text Lorem ipsum dolor sit amet,
-        </v-list-item-subtitle>
-        <v-list-item-subtitle>
-          consectetur adipiscing elit.
-        </v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
-  </v-card>
+  </v-timeline>
+  </v-layout>
 </template>
 <script>
 // import router from '../router'
@@ -149,17 +65,22 @@ export default {
 }
 </script>
 <style>
+  div {
+    text-align: center;
+  }
   h4 {
     text-align: center;
     font-size:150px;
   }
   p {
-    color:red;
+    text-align: center;
     font-size:64px;
     display: inline
   }
   h1 {
     display: inline
   }
-
+  .column {
+    
+  }
 </style>
