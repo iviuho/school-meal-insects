@@ -27,11 +27,11 @@ app.use(
   session({
     resave: false,
     saveUninitialized: false,
-    secret: "ddddd",
+    secret: process.env.COOKIE_SECRET,
     cookie: {
       httpOnly: true,
       secure: false
-    } 
+    }
   })
 );
 app.use(passport.initialize());
@@ -75,5 +75,16 @@ mongoose.connect('mongodb://localhost:27017/menu', {
   //     .catch(e => console.error(e))
 
 })
+
+app.use((err, req, res) => {
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
+  res.status(err.status || 500);
+  res.render("error");
+});
+
+app.listen(app.get("port"), () => {
+  console.log(app.get("port"), "번 포트에서 대기 중");
+});
 
 module.exports = app;
