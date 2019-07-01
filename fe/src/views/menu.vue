@@ -1,32 +1,29 @@
 <template>
   <v-layout justify-space-around>
     <v-flex>
-      <div class="column">
-        <div>
-        <h4>{{id}}</h4>
-        <h1>like</h1>
-        <v-icon size="64">thumb_up</v-icon>
-        <p><strong> &nbsp;&nbsp;{{like}}</strong></p>
-        <h1>dislike</h1>
-        <v-icon size="64">thumb_down</v-icon>
-        <p><strong> &nbsp;&nbsp;{{dislike}}</strong></p>
+      <div class="row">
+        <div class="column_center">
+          <h4>{{id}}</h4>
+          <v-btn icon large @click="postReq(id, 'like')" style="width:64px; height:64px;">
+            <v-icon size="64">thumb_up</v-icon>
+          </v-btn>
+          <p><strong> &nbsp;&nbsp;{{like}}&nbsp;&nbsp;&nbsp;</strong></p>
+          <v-btn icon large @click="postReq(this.id, 'dislike')" style="width:64px; height:64px;">
+            <v-icon size="64">thumb_down</v-icon>
+          </v-btn>
+          <p><strong> &nbsp;&nbsp;{{dislike}}</strong></p>
+        </div>
+        <div class="date">
+          <h2 v-for="dates in date" v-bind:key="dates">
+            -----------------------
+            <br>
+            {{dates}}
+            <br>
+            -----------------------
+          </h2>
         </div>
       </div>
     </v-flex>
-  <v-timeline>
-
-    <v-timeline-item v-for="dates in date" v-bind:key="dates"
-      color="purple lighten-2"
-      fill-dot
-    >
-      <v-card>
-        <v-card-title class="purple lighten-2">
-          <h2 class="display-1 white--text font-weight-light">{{ dates }}</h2>
-        </v-card-title>
-      </v-card>
-    </v-timeline-item>
-
-  </v-timeline>
   </v-layout>
 </template>
 <script>
@@ -60,6 +57,18 @@ export default {
         .catch((e) => {
           console.error(e.message)
         })
+    },
+    postReq (name, order) {
+      const baseURI = 'http://localhost:3000/menu/'
+      this.$http.post(`${baseURI + name}`, {
+        order: order
+      })
+        .then((r) => {
+          console.log('성공')
+        })
+        .catch((e) => {
+          console.error(e.message)
+        })
     }
   }
 }
@@ -69,18 +78,31 @@ export default {
     text-align: center;
   }
   h4 {
-    text-align: center;
     font-size:150px;
   }
   p {
     text-align: center;
     font-size:64px;
-    display: inline
+    display: inline;
+    position: relative;
+    top: 13px;
   }
   h1 {
     display: inline
   }
-  .column {
-    
+  /* .row {
+  } */
+  .column_center {
+    position: relative;
+    width: 1300px;
+
+  }
+  .date {
+    position:absolute;
+    right: 150px;
+    top: 50px;
+    border: 5px solid;
+    width: 200px;
+    height: auto;
   }
 </style>
