@@ -23,7 +23,14 @@ router.post('/:menuName', function(req, res, next) {
     var order = req.body.order;
 
     if (order === 'like' || order === 'dislike') {
-        Menu.updateOne({'name': req.params.menuName}, {'$inc': {[order]: 1}}).then(r => {
+        if (req.body.hasOwnProperty('value')) {
+            var value = req.body.value;
+        }
+        else {
+            var value = 1;
+        }
+
+        Menu.updateOne({'name': req.params.menuName}, {'$inc': {[order]: value}}).then(r => {
             res.send({'success': Boolean(r.nModified)});
         });
     }
