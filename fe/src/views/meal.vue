@@ -13,7 +13,7 @@
         <v-window v-model="window" class="elevation-1">
           <v-window-item v-for="i in items" :key="i">
             <v-container column fluid>
-              <v-card class="rounded-card" v-for="menu in menus[i]" v-bind:key="menu">
+              <v-card class="rounded-card" v-for="menu in menus[i]" v-bind:key="menu" min-width="300">
                 <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
                     <h3>{{menu}}</h3>
                 </v-card-title>
