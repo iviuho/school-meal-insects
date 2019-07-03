@@ -21,7 +21,7 @@ router.get('/google',
 router.get('/google/callback', passport.authenticate('google', {
     failureRedirect: '/' //실패했을때
 }), (req, res) => {
-    console.log("로그인 성공" + req.query);
+    console.log("로그인 성공" + req.user);
     res.redirect('/'); //성공했을때
 });
 
