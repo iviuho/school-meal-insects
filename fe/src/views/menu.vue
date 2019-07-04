@@ -28,7 +28,7 @@
           ref="form"
           v-model="valid"
           lazy-validation
-        > 
+        >
           <v-text-field
             v-model="writeaut"
             label="nickname"
@@ -131,12 +131,12 @@ export default {
         author: aut,
         content: con
       })
-      .then((r) => {
-        console.log('성공')
-      })
-      .catch((e) => {
-        console.error(e.message)
-      })
+        .then((r) => {
+          console.log('성공')
+        })
+        .catch((e) => {
+          console.error(e.message)
+        })
     },
     validate () {
       if (this.$refs.form.validate()) {
