@@ -2,8 +2,14 @@ const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema(
     {
-        'author': String,
-        'content': String,
+        'author': {
+            type: String,
+            default: ""
+        },
+        'content': {
+            type: String,
+            default: ""
+        },
         'date': {
             type: Date,
             default: Date.now()
