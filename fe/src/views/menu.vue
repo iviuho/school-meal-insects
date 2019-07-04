@@ -68,20 +68,21 @@
 export default {
   props: ['id'],
   data () {
-    return {items: [
-          { action: '15 min', headline: 'Brunch this weekend?', title: 'Ali Connors', subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?" },
-          { action: '2 hr', headline: 'Summer BBQ', title: 'me, Scrott, Jennifer', subtitle: "Wish I could come, but I'm out of town this weekend." },
-          { action: '6 hr', headline: 'Oui oui', title: 'Sandra Adams', subtitle: 'Do you have Paris recommendations? Have you ever been?' },
-          { action: '12 hr', headline: 'Birthday gift', title: 'Trevor Hansen', subtitle: 'Have any ideas about what we should get Heidi for her birthday?' },
-          { action: '18hr', headline: 'Recipe to try', title: 'Britta Holt', subtitle: 'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.' }
-        ],
+    return {
+      items: [
+        { action: '15 min', headline: 'Brunch this weekend?', title: 'Ali Connors', subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?" },
+        { action: '2 hr', headline: 'Summer BBQ', title: 'me, Scrott, Jennifer', subtitle: "Wish I could come, but I'm out of town this weekend." },
+        { action: '6 hr', headline: 'Oui oui', title: 'Sandra Adams', subtitle: 'Do you have Paris recommendations? Have you ever been?' },
+        { action: '12 hr', headline: 'Birthday gift', title: 'Trevor Hansen', subtitle: 'Have any ideas about what we should get Heidi for her birthday?' },
+        { action: '18hr', headline: 'Recipe to try', title: 'Britta Holt', subtitle: 'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.' }
+      ],
       like: 0,
       dislike: 0,
       date: [],
       nick: [],
       comment: [],
-      author: "",
-      content: ""
+      author: '',
+      content: ''
     }
   },
   mounted () {
@@ -100,7 +101,7 @@ export default {
           console.log(this.dislike)
           this.date = r.data.frequency
           console.log(this.date)
-          this.comment = r.data.comments;
+          this.comment = r.data.comments
           console.log(this.comment)
         })
         .catch((e) => {
@@ -124,7 +125,7 @@ export default {
       console.log(con)
       const baseURI = 'http://localhost:3000/menu/'
       this.$http.post(`${baseURI + name}`, {
-        order: "comment",
+        order: 'comment',
         author: aut,
         content: con
       })

@@ -50,20 +50,17 @@ export default {
     }
   },
   mounted () {
-    this.getUsers()
+    this.getMeals()
   },
   methods: {
-    getUsers () {
-      // using JSONPlaceholder
+    getMeals () {
       const baseURI = 'http://localhost:3000/meal'
-      this.$http.get(`${baseURI}`)
+      this.$http.get(baseURI)
         .then((result) => {
-          this.posts = result.data
-
-          this.leng = this.posts.data.breakfast.length
-          this.menus['아침'] = this.posts.data.breakfast
-          this.menus['점심'] = this.posts.data.lunch
-          this.menus['저녁'] = this.posts.data.dinner
+          this.leng = result.data.data.breakfast.length
+          this.menus['아침'] = result.data.data.breakfast
+          this.menus['점심'] = result.data.data.lunch
+          this.menus['저녁'] = result.data.data.dinner
         })
         .catch((e) => {
           console.error(e.message)
@@ -74,7 +71,7 @@ export default {
     },
     postReq (name, order) {
       const baseURI = 'http://localhost:3000/menu/'
-      this.$http.post(`${baseURI + name}`, {
+      this.$http.post(baseURI + name, {
         order: order
       })
         .then((r) => {
