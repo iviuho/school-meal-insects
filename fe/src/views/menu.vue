@@ -1,7 +1,7 @@
 <template>
   <v-layout justify-space-around>
     <v-flex>
-      <div class="row">
+      <div>
         <div class="column_center">
           <h4>{{id}}</h4>
           <v-btn icon large @click="postReq(id, 'like')" style="width:64px; height:64px;">
@@ -23,6 +23,42 @@
           </h2>
         </div>
       </div>
+      <div class="comment">
+        <v-text-field
+          v-model="writeaut"
+          label="nickname"
+          maxlength="10"
+          counter="10"
+        ></v-text-field>
+        <v-text-field
+          v-model="writecom"
+          :counter="30"
+          :rules="nameRules"
+          label="Comments"
+          required
+        ></v-text-field>
+
+        <v-btn
+          color="success"
+          @click="postComment(id, writeaut, writecom)"
+        >
+          Validate
+        </v-btn>
+
+      </div>
+      <div class="list_comment">
+         <v-list two-line>
+          <template v-for="(item, index) in comment">
+            <v-list-tile :key="index">
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.author }}</v-list-tile-title>
+                <v-list-tile-sub-title class="text--primary">{{ item.content }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-divider v-if="index + 1 < items.length" :key="`divider-${index}`"></v-divider>
+          </template>
+        </v-list>
+      </div>
     </v-flex>
   </v-layout>
 </template>
@@ -32,10 +68,20 @@
 export default {
   props: ['id'],
   data () {
-    return {
+    return {items: [
+          { action: '15 min', headline: 'Brunch this weekend?', title: 'Ali Connors', subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?" },
+          { action: '2 hr', headline: 'Summer BBQ', title: 'me, Scrott, Jennifer', subtitle: "Wish I could come, but I'm out of town this weekend." },
+          { action: '6 hr', headline: 'Oui oui', title: 'Sandra Adams', subtitle: 'Do you have Paris recommendations? Have you ever been?' },
+          { action: '12 hr', headline: 'Birthday gift', title: 'Trevor Hansen', subtitle: 'Have any ideas about what we should get Heidi for her birthday?' },
+          { action: '18hr', headline: 'Recipe to try', title: 'Britta Holt', subtitle: 'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.' }
+        ],
       like: 0,
       dislike: 0,
-      date: []
+      date: [],
+      nick: [],
+      comment: [],
+      author: "",
+      content: ""
     }
   },
   mounted () {
@@ -53,6 +99,9 @@ export default {
           this.dislike = r.data.dislike
           console.log(this.dislike)
           this.date = r.data.frequency
+          console.log(this.date)
+          this.comment = r.data.comments;
+          console.log(this.comment)
         })
         .catch((e) => {
           console.error(e.message)
@@ -62,6 +111,22 @@ export default {
       const baseURI = 'http://localhost:3000/menu/'
       this.$http.post(`${baseURI + name}`, {
         order: order
+      })
+        .then((r) => {
+          console.log('성공')
+        })
+        .catch((e) => {
+          console.error(e.message)
+        })
+    },
+    postComment (name, aut, con) {
+      console.log(aut)
+      console.log(con)
+      const baseURI = 'http://localhost:3000/menu/'
+      this.$http.post(`${baseURI + name}`, {
+        order: "comment",
+        author: aut,
+        content: con
       })
         .then((r) => {
           console.log('성공')
@@ -99,10 +164,21 @@ export default {
   }
   .date {
     position:absolute;
-    right: 150px;
+    left: 1250px;
     top: 50px;
     border: 5px solid;
     width: 200px;
     height: auto;
+  }
+  .comment {
+    position: relative;
+    left: 100px;
+    width: 1000px;
+  }
+  .list_comment {
+    position: relative;
+    top: 50px;
+    left: 100px;
+    width: 1000px;
   }
 </style>
