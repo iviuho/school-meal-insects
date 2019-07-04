@@ -54,7 +54,7 @@
             color="success"
             @click="validate()"
           >
-            Validate
+            제출
           </v-btn>
         </v-form>
       </div>
@@ -191,6 +191,6 @@ export default {
     position: relative;
     top: 50px;
     left: 100px;
-    width: 1000px; 
+    width: 1000px;
   }
 </style>

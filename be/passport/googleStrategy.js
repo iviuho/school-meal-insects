@@ -18,11 +18,7 @@ module.exports = () => {
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
         callbackURL: '/auth/google/callback',
-
     }, async (accessToken, refreshToken, profile, done) => {
-        // console.log(profile); //??? ??
-        // console.log(profile._json.email); //?
-        // console.log(profile.id);
         try {
             console.log(profile);
             const exUser = await User.find({
