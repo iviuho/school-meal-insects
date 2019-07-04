@@ -11,7 +11,33 @@
           </v-list>
         </v-toolbar>
 
-        <v-divider></v-divider>
+        <v-divider/>
+
+        <v-toolbar flat class="transparent">
+          <v-list class="pa-0">
+            <v-list-tile avatar @click="test" v-if="isAuth">
+              <v-list-tile-avatar>
+                <img src="https://randomuser.me/api/portraits/men/85.jpg">
+              </v-list-tile-avatar>
+
+              <v-list-tile-content>
+                <v-list-tile-title>{{account.name}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile avatar @click="toLogin" v-else>
+              <v-list-tile-avatar>
+                <v-icon>person</v-icon>
+              </v-list-tile-avatar>
+
+              <v-list-tile-content>
+                <v-list-tile-title>로그인이 필요합니다!</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-toolbar>
+
+        <v-divider/>
 
         <v-list dense class="pt-0">
           <v-list-tile
@@ -40,6 +66,10 @@ export default {
   name: 'App',
   data () {
     return {
+      isAuth: false,
+      account: {
+        'name': 'Jo Yeonghwan'
+      },
       items: [
         {
           icon: 'local_dining',
@@ -57,6 +87,13 @@ export default {
   methods: {
     goHome () {
       this.$router.push('/')
+    },
+    test () {
+      this.isAuth = !this.isAuth
+      console.log('it is test method!')
+    },
+    toLogin () {
+      console.log('로그인 어케 하누')
     }
   }
 }

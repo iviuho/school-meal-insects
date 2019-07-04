@@ -20,7 +20,6 @@ app.use(
   })
 );
 
-app.use('/', require('./routes/index'))
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
@@ -36,6 +35,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use('/', require('./routes/index'));
 
 mongoose.set('useCreateIndex', true);
 mongoose.connect('mongodb://localhost:27017/menu', {

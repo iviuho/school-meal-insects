@@ -76,22 +76,26 @@ const addToDB = async function(data) {
 
     for (var key in data) {
         data[key].forEach(element => {
-            Menu.find({'name': element})
-            .then(r => {
-                if (r.length === 0) {
-                    Menu.create({'name': element, 'frequency': [date]})
-                    .then(result => console.log(`${element} was added to MongoDB.`))
-                    .catch(error => {});
-                }
-                else {
-                    if (r[0]['frequency'].find(e => {return (e === date)}) === undefined) {
-                        Menu.updateOne({'name': element}, {'$push': {"frequency": date}})
-                        .then(result => console.log(`${element} was updated today's date.`))
-                        .catch(error => {});
-                    }
-                }
-            })
-            .catch(e => console.error(e));
+            Menu.updateOne({'name': element}, {'$addToSet': {'frequency': date}}, {upsert: true})
+            .then(result => console.log(`${element} was updated to MongoDB.`))
+            .catch(error => {});
+
+            // Menu.find({'name': element})
+            // .then(r => {
+            //     if (r.length === 0) {
+            //         Menu.create({'name': element, 'frequency': [date]})
+            //         .then(result => console.log(`${element} was added to MongoDB.`))
+            //         .catch(error => {});
+            //     }
+            //     else {
+            //         if (r[0]['frequency'].find(e => {return (e === date)}) === undefined) {
+            //             Menu.updateOne({'name': element}, {'$push': {"frequency": date}})
+            //             .then(result => console.log(`${element} was updated today's date.`))
+            //             .catch(error => {});
+            //         }
+            //     }
+            // })
+            // .catch(e => console.error(e));
         })
     }
 }
