@@ -83,8 +83,8 @@ export default {
       date: [],
       nick: [],
       comment: [],
-      author: "",
-      content: ""
+      author: '',
+      content: ''
     }
   },
   mounted () {
@@ -103,7 +103,7 @@ export default {
           console.log(this.dislike)
           this.date = r.data.frequency
           console.log(this.date)
-          this.comment = r.data.comments;
+          this.comment = r.data.comments
           console.log(this.comment)
         })
         .catch((e) => {
@@ -127,7 +127,7 @@ export default {
       console.log(con)
       const baseURI = 'http://localhost:3000/menu/'
       this.$http.post(`${baseURI + name}`, {
-        order: "comment",
+        order: 'comment',
         author: aut,
         content: con
       })
