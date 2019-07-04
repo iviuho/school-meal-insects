@@ -24,27 +24,36 @@
         </div>
       </div>
       <div class="comment">
-        <v-text-field
-          v-model="writeaut"
-          label="nickname"
-          maxlength="10"
-          counter="10"
-        ></v-text-field>
-        <v-text-field
-          v-model="writecom"
-          :counter="30"
-          :rules="nameRules"
-          label="Comments"
-          required
-        ></v-text-field>
+        <v-form
+          ref="form"
+          v-model="valid"
+          lazy-validation
+        > 
+          <v-text-field
+            v-model="writeaut"
+            label="nickname"
+            :counter="30"
+            maxlength="10"
+            :rules="[v => !!v || 'id is required']"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="writecom"
+            :counter="30"
+            maxlength="30"
+            :rules="[v => !!v || 'content is required']"
+            label="Comments"
+            required
+          ></v-text-field>
 
-        <v-btn
-          color="success"
-          @click="postComment(id, writeaut, writecom)"
-        >
-          Validate
-        </v-btn>
-
+          <v-btn
+            :disabled="!valid"
+            color="success"
+            @click="validate()"
+          >
+            Validate
+          </v-btn>
+        </v-form>
       </div>
       <div class="list_comment">
          <v-list two-line>
@@ -55,7 +64,7 @@
                 <v-list-tile-sub-title class="text--primary">{{ item.content }}</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
-            <v-divider v-if="index + 1 < items.length" :key="`divider-${index}`"></v-divider>
+            <v-divider v-if="index + 1 < comment.length" :key="`divider-${index}`"></v-divider>
           </template>
         </v-list>
       </div>
@@ -68,13 +77,7 @@
 export default {
   props: ['id'],
   data () {
-    return {items: [
-          { action: '15 min', headline: 'Brunch this weekend?', title: 'Ali Connors', subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?" },
-          { action: '2 hr', headline: 'Summer BBQ', title: 'me, Scrott, Jennifer', subtitle: "Wish I could come, but I'm out of town this weekend." },
-          { action: '6 hr', headline: 'Oui oui', title: 'Sandra Adams', subtitle: 'Do you have Paris recommendations? Have you ever been?' },
-          { action: '12 hr', headline: 'Birthday gift', title: 'Trevor Hansen', subtitle: 'Have any ideas about what we should get Heidi for her birthday?' },
-          { action: '18hr', headline: 'Recipe to try', title: 'Britta Holt', subtitle: 'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.' }
-        ],
+    return {
       like: 0,
       dislike: 0,
       date: [],
@@ -128,12 +131,18 @@ export default {
         author: aut,
         content: con
       })
-        .then((r) => {
-          console.log('성공')
-        })
-        .catch((e) => {
-          console.error(e.message)
-        })
+      .then((r) => {
+        console.log('성공')
+      })
+      .catch((e) => {
+        console.error(e.message)
+      })
+    },
+    validate () {
+      if (this.$refs.form.validate()) {
+        this.snackbar = true
+        this.postComment(this.id, this.writeaut, this.writecom)
+      }
     }
   }
 }
