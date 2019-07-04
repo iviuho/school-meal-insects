@@ -14,13 +14,16 @@
           <p><strong> &nbsp;&nbsp;{{dislike}}</strong></p>
         </div>
         <div class="date">
-          <h2 v-for="dates in date" v-bind:key="dates">
-            -----------------------
-            <br>
-            {{dates}}
-            <br>
-            -----------------------
-          </h2>
+          <v-list two-line style="background-color: #FAFAFA;">
+            <template v-for="(item, index) in date">
+              <v-list-tile :key="index">
+                <v-list-tile-content>
+                  <v-list-tile-sub-title class="text--primary">{{ item }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-divider v-if="index + 1 < date.length" :key="`divider-${index}`"></v-divider>
+            </template>
+          </v-list>
         </div>
       </div>
       <div class="comment">
@@ -56,7 +59,7 @@
         </v-form>
       </div>
       <div class="list_comment">
-         <v-list two-line>
+         <v-list two-line style="background-color: #FAFAFA;">
           <template v-for="(item, index) in comment">
             <v-list-tile :key="index">
               <v-list-tile-content>
@@ -175,7 +178,7 @@ export default {
     position:absolute;
     left: 1250px;
     top: 50px;
-    border: 5px solid;
+    border: 1px solid;
     width: 200px;
     height: auto;
   }
@@ -188,6 +191,6 @@ export default {
     position: relative;
     top: 50px;
     left: 100px;
-    width: 1000px;
+    width: 1000px; 
   }
 </style>

@@ -55,7 +55,7 @@
           </v-list-tile>
         </v-list>
       </v-navigation-drawer>
-    <v-content>
+    <v-content style="background-color: #FAFAFA;">
       <router-view/>
     </v-content>
   </v-app>
@@ -98,3 +98,9 @@ export default {
   }
 }
 </script>
+<style>
+  /* .back {
+    background: white;
+  } */
+</style>
+
