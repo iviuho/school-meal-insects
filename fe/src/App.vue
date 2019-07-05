@@ -98,9 +98,3 @@ export default {
   }
 }
 </script>
-<style>
-  /* .back {
-    background: white;
-  } */
-</style>
-

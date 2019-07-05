@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
+const flash = require("flash");
 require("dotenv").config();
 
 const Menu = require('./models/menu').menuSchema;
