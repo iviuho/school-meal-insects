@@ -75,7 +75,7 @@ export default {
         order: order
       })
         .then((r) => {
-          console.log('성공')
+          console.log(r)
         })
         .catch((e) => {
           console.error(e.message)

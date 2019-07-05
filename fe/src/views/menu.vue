@@ -3,15 +3,17 @@
     <v-flex>
       <div>
         <div class="column_center">
+          <br>
           <h4>{{id}}</h4>
+          <br>
           <v-btn icon large @click="postReq(id, 'like')" style="width:64px; height:64px;">
-            <v-icon size="64">thumb_up</v-icon>
+            <v-icon color="success" size="64">thumb_up</v-icon>
           </v-btn>
-          <p><strong> &nbsp;&nbsp;{{like}}&nbsp;&nbsp;&nbsp;</strong></p>
-          <v-btn icon large @click="postReq(this.id, 'dislike')" style="width:64px; height:64px;">
-            <v-icon size="64">thumb_down</v-icon>
+          <p><strong>&nbsp;{{like}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></p>
+          <v-btn icon large @click="postReq(id, 'dislike')" style="width:64px; height:64px;">
+            <v-icon color="error" size="64">thumb_down</v-icon>
           </v-btn>
-          <p><strong> &nbsp;&nbsp;{{dislike}}</strong></p>
+          <p><strong>&nbsp;{{dislike}}&nbsp;</strong></p>
         </div>
         <div class="date">
           <v-list two-line style="background-color: #FAFAFA;">
@@ -34,17 +36,17 @@
         >
           <v-text-field
             v-model="writeaut"
-            label="nickname"
-            :counter="30"
+            label="Nickname"
+            :counter="10"
             maxlength="10"
-            :rules="[v => !!v || 'id is required']"
+            :rules="[v => !!v || 'ID is required']"
             required
           ></v-text-field>
           <v-text-field
             v-model="writecom"
             :counter="30"
             maxlength="30"
-            :rules="[v => !!v || 'content is required']"
+            :rules="[v => !!v || 'Content is required']"
             label="Comments"
             required
           ></v-text-field>
@@ -60,7 +62,7 @@
       </div>
       <div class="list_comment">
          <v-list two-line style="background-color: #FAFAFA;">
-          <template v-for="(item, index) in comment">
+          <template v-for="(item, index) in calData">
             <v-list-tile :key="index">
               <v-list-tile-content>
                 <v-list-tile-title>{{ item.author }}</v-list-tile-title>
@@ -69,6 +71,13 @@
             </v-list-tile>
             <v-divider v-if="index + 1 < comment.length" :key="`divider-${index}`"></v-divider>
           </template>
+          <br>
+          <br>
+          <v-pagination
+            v-model="page"
+            :length="pagelength"
+            :total-visible="7"
+          ></v-pagination>
         </v-list>
       </div>
     </v-flex>
@@ -81,6 +90,9 @@ export default {
   props: ['id'],
   data () {
     return {
+      page: 1,
+      pagelength:0,
+      dataPerPage: 4,
       like: 0,
       dislike: 0,
       date: [],
@@ -91,8 +103,21 @@ export default {
     }
   },
   mounted () {
-    console.log(this.id)
     this.getData()
+  },
+  computed: {
+    startOffset() {
+      return ((this.page-1)*this.dataPerPage);
+    },
+    endOffset() {
+      return (this.startOffset + this.dataPerPage);
+    },
+    numOfPages() {
+      return Math.ceil(this.comment.length / this.dataPerPage);
+    },
+    calData() {
+      return this.comment.slice(this.startOffset, this.endOffset)
+    }
   },
   methods: {
     getData () {
@@ -101,13 +126,14 @@ export default {
         .then((r) => {
           console.log(r)
           this.like = r.data.like
-          console.log(this.like)
           this.dislike = r.data.dislike
-          console.log(this.dislike)
           this.date = r.data.frequency
-          console.log(this.date)
           this.comment = r.data.comments
-          console.log(this.comment)
+          if(this.comment.length%this.dataPerPage==0) {
+            this.pagelength=this.comment.length/this.dataPerPage
+          }else {
+            this.pagelength=this.comment.length/this.dataPerPage+1
+          }
         })
         .catch((e) => {
           console.error(e.message)
@@ -115,19 +141,18 @@ export default {
     },
     postReq (name, order) {
       const baseURI = 'http://localhost:3000/menu/'
-      this.$http.post(`${baseURI + name}`, {
+      this.$http.post(baseURI + name, {
         order: order
       })
         .then((r) => {
-          console.log('성공')
+          console.log(r)
+          this.getData()
         })
         .catch((e) => {
           console.error(e.message)
         })
     },
     postComment (name, aut, con) {
-      console.log(aut)
-      console.log(con)
       const baseURI = 'http://localhost:3000/menu/'
       this.$http.post(`${baseURI + name}`, {
         order: 'comment',
@@ -135,7 +160,8 @@ export default {
         content: con
       })
         .then((r) => {
-          console.log('성공')
+          console.log(r)
+          this.getData()
         })
         .catch((e) => {
           console.error(e.message)
@@ -145,6 +171,8 @@ export default {
       if (this.$refs.form.validate()) {
         this.snackbar = true
         this.postComment(this.id, this.writeaut, this.writecom)
+        this.$refs.form.reset()
+        this.getData()
       }
     }
   }
@@ -155,10 +183,9 @@ export default {
     text-align: center;
   }
   h4 {
-    font-size:150px;
+    font-size:100px;
   }
   p {
-    text-align: center;
     font-size:64px;
     display: inline;
     position: relative;
@@ -183,6 +210,7 @@ export default {
     height: auto;
   }
   .comment {
+    top: 25px;
     position: relative;
     left: 100px;
     width: 1000px;
