@@ -4,10 +4,13 @@ const {
 } = mongoose;
 
 const userSchema = new Schema({
-    email: {
+    id: {
         type: String
     },
-    snsId: {
+    password: {
+        type: String
+    },
+    name: {
         type: String
     }
 });
