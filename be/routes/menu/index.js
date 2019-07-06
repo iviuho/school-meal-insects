@@ -1,6 +1,7 @@
 const express = require('express');
 const Comment = require('../../models/menu').commentSchema;
 const Menu = require('../../models/menu').menuSchema;
+const User = require('../../models/user');
 
 const router = express.Router();
 
@@ -29,6 +30,17 @@ router.post('/:menuName', function(req, res, next) {
         else {
             var value = 1;
         }
+
+        if (value > 0) {
+            var method = '$push';
+        }
+        else {
+            var method = '$pull';
+        }
+        
+        User.findOneAndUpdate({'id': req.body.id}, {[method]: {[order + "s"]: req.params.menuName}})
+        .then(r => {})
+        .catch(e => console.error(e));
 
         Menu.updateOne({'name': req.params.menuName}, {'$inc': {[order]: value}}).then(r => {
             res.send({'success': Boolean(r.nModified)});
