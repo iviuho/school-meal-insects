@@ -6,14 +6,14 @@
           <br>
           <h4>{{id}}</h4>
           <br>
-          <v-btn v-if="this.account.likes.includes(this.id)" icon large @click="postReq(id, 'like')" style="width:64px; height:64px;">
+          <v-btn v-if="account.likes.includes(this.id)" icon large @click="postReq(id, 'like')" style="width:64px; height:64px;">
             <v-icon color="success" size="64">thumb_up</v-icon>
           </v-btn>
           <v-btn v-else icon large @click="postReq(id, 'like')" style="width:64px; height:64px;">
             <v-icon size="64">thumb_up</v-icon>
           </v-btn>
           <p><strong>&nbsp;{{like}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></p>
-          <v-btn v-if="this.account.dislikes.includes(this.id)" icon large @click="postReq(id, 'dislike')" style="width:64px; height:64px;">
+          <v-btn v-if="account.dislikes.includes(this.id)" icon large @click="postReq(id, 'dislike')" style="width:64px; height:64px;">
             <v-icon color="error" size="64">thumb_down</v-icon>
           </v-btn>
           <v-btn v-else icon large @click="postReq(id, 'dislike')" style="width:64px; height:64px;">
@@ -141,15 +141,15 @@ export default {
         })
     },
     postReq (name, order) {
-      if(this.isAuth){
+      if (this.isAuth) {
         const baseURI = 'http://localhost:3000/menu/'
-        if(!(this.account.like.includes(this.id))) {
-        
+        if (!(this.account.likes.includes(this.id))) {
           this.$http.post(baseURI + name, {
             order: order
           })
             .then((r) => {
               console.log(r)
+              this.$emit('changeData', this.id)
               this.account.likes.push(this.id)
               this.getData()
             })

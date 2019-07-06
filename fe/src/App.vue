@@ -56,7 +56,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-content style="background-color: #FAFAFA;">
-      <router-view :isAuth="isAuth" :account="account"/>
+      <router-view :isAuth="isAuth" :account="account" @changeData="changeData"/>
 
       <v-dialog v-model="logoutDialog" max-width="600px">
         <v-card>
@@ -71,7 +71,7 @@
         </v-card>
       </v-dialog>
 
-      <v-dialog v-model="loginDialog" max-width="600px">
+      <v-dialog v-model="loginDialog" max-width="600px" @input="cancelLogin">
         <v-card>
           <v-card-title class="headline">로그인</v-card-title>
           <v-card-text>
@@ -175,9 +175,17 @@ export default {
       ]
     }
   },
+  watch: {
+    loginDialog (val) {
+      !val && this.cancelLogin()
+    },
+    signupDialog (val) {
+      !val && this.cancelSignup()
+    }
+  },
   methods: {
-    test () {
-      console.log('it is test method!')
+    test (arg) {
+      console.log('it is test method!', arg)
     },
     cancelLogin () {
       this.loginDialog = false
@@ -263,6 +271,10 @@ export default {
       this.name = ''
       this.id = ''
       this.pw = ''
+    },
+    changeData (data) {
+      this.account.likes.push(data)
+      console.log(this.account.likes)
     }
   }
 }
