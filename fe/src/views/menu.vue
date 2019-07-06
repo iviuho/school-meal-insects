@@ -76,7 +76,7 @@
           <v-pagination
             v-model="page"
             :length="pagelength"
-            :total-visible="7"
+            :total-visible="5"
           ></v-pagination>
         </v-list>
       </div>
