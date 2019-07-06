@@ -87,7 +87,7 @@
 // import router from '../router'
 
 export default {
-  props: ['id'],
+  props: ['id', 'isAuth', 'account'],
   data () {
     return {
       page: 1,
