@@ -183,7 +183,8 @@ export default {
       this.resetInput()
     },
     toLogout () {
-      this.account = {}
+      this.account.name = ''
+      this.account.id = ''
       this.isAuth = false
       this.logoutDialog = false
 
@@ -200,16 +201,23 @@ export default {
         return
       }
 
-      // 성공 시
-      // this.snackbarColor = 'success'
-      // this.text = '로그인에 성공했습니다'
-      // this.snackbar = true
-      // this.isAuth = true
+      this.$http.post('http://localhost:3000/auth/login', { 'id': this.id, 'password': this.pw })
+        .then(r => {
+          // 성공 시
+          this.snackbarColor = 'success'
+          this.text = '로그인에 성공했습니다'
+          this.snackbar = true
 
-      // 실패 시
-      // this.snackbarColor = this.failColor
-      // this.text = '로그인에 실패했습니다'
-      // this.snackbar = true
+          this.account.name = r.data.name
+          this.account.id = r.data.id
+          this.isAuth = true
+        })
+        .catch(e => {
+          // 실패 시
+          this.snackbarColor = this.failColor
+          this.text = '로그인에 실패했습니다'
+          this.snackbar = true
+        })
 
       this.loginDialog = false
       this.resetInput()
@@ -228,15 +236,19 @@ export default {
         return
       }
 
-      // 성공 시
-      // this.snackbarColor = 'success'
-      // this.text = '성공적으로 가입됐습니다'
-      // this.snackbar = true
-
-      // 실패 시
-      // this.snackbarColor = this.failColor
-      // this.text = '회원가입에 실패했습니다'
-      // this.snackbar = true
+      this.$http.post('http://localhost:3000/auth/signup', { 'name': this.name, 'id': this.id, 'password': this.pw })
+        .then(r => {
+          // 성공 시
+          this.snackbarColor = 'success'
+          this.text = '성공적으로 가입됐습니다'
+          this.snackbar = true
+        })
+        .catch(e => {
+          // 실패 시
+          this.snackbarColor = this.failColor
+          this.text = '회원가입에 실패했습니다'
+          this.snackbar = true
+        })
 
       this.signupDialog = false
       this.resetInput()

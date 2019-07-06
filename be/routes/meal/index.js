@@ -63,6 +63,9 @@ const parseMeal = async function() {
             case "[석식]":
                 index = "dinner";
                 break;
+            case "":
+                console.log('급식 정보를 불러올 수 없음.')
+                break
             default:
                 thisMeal[index].push(re.exec(element).pop());
         }
@@ -79,23 +82,6 @@ const addToDB = async function(data) {
             Menu.updateOne({'name': element}, {'$addToSet': {'frequency': date}}, {upsert: true})
             .then(result => console.log(`${element} was updated to MongoDB.`))
             .catch(error => {});
-
-            // Menu.find({'name': element})
-            // .then(r => {
-            //     if (r.length === 0) {
-            //         Menu.create({'name': element, 'frequency': [date]})
-            //         .then(result => console.log(`${element} was added to MongoDB.`))
-            //         .catch(error => {});
-            //     }
-            //     else {
-            //         if (r[0]['frequency'].find(e => {return (e === date)}) === undefined) {
-            //             Menu.updateOne({'name': element}, {'$push': {"frequency": date}})
-            //             .then(result => console.log(`${element} was updated today's date.`))
-            //             .catch(error => {});
-            //         }
-            //     }
-            // })
-            // .catch(e => console.error(e));
         })
     }
 }
