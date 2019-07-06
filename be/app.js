@@ -39,6 +39,7 @@ app.use(passport.session());
 app.use('/', require('./routes/index'));
 
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 mongoose.connect('mongodb://localhost:27017/menu', {
   useNewUrlParser: true
 }, (err) => {
