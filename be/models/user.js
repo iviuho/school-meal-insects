@@ -12,7 +12,9 @@ const userSchema = new Schema({
     },
     name: {
         type: String
-    }
+    },
+    likes: [String],
+    dislikes: [String]
 });
 
 module.exports = mongoose.model('User', userSchema);
