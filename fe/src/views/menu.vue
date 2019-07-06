@@ -33,6 +33,7 @@
           ref="form"
           v-model="valid"
           lazy-validation
+          onsubmit="return false;"
         >
           <v-text-field
             v-model="writecom"
@@ -40,6 +41,7 @@
             maxlength="30"
             :rules="[v => !!v || 'Content is required']"
             label="Comments"
+            @keypress.enter="validate"
             required
           ></v-text-field>
 
