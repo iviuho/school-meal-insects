@@ -91,7 +91,7 @@ export default {
   data () {
     return {
       page: 1,
-      pagelength: 0,
+      pagelength:0,
       dataPerPage: 4,
       like: 0,
       dislike: 0,
@@ -99,26 +99,23 @@ export default {
       nick: [],
       comment: [],
       author: '',
-      content: '',
-      valid: '',
-      writeaut: '',
-      writecom: ''
+      content: ''
     }
   },
   mounted () {
     this.getData()
   },
   computed: {
-    startOffset () {
-      return ((this.page - 1) * this.dataPerPage)
+    startOffset() {
+      return ((this.page-1)*this.dataPerPage);
     },
-    endOffset () {
-      return (this.startOffset + this.dataPerPage)
+    endOffset() {
+      return (this.startOffset + this.dataPerPage);
     },
-    numOfPages () {
-      return Math.ceil(this.comment.length / this.dataPerPage)
+    numOfPages() {
+      return Math.ceil(this.comment.length / this.dataPerPage);
     },
-    calData () {
+    calData() {
       return this.comment.slice(this.startOffset, this.endOffset)
     }
   },
@@ -132,10 +129,10 @@ export default {
           this.dislike = r.data.dislike
           this.date = r.data.frequency
           this.comment = r.data.comments
-          if (this.comment.length % this.dataPerPage === 0) {
-            this.pagelength = this.comment.length / this.dataPerPage
-          } else {
-            this.pagelength = this.comment.length / this.dataPerPage + 1
+          if(this.comment.length%this.dataPerPage==0) {
+            this.pagelength=this.comment.length/this.dataPerPage
+          }else {
+            this.pagelength=this.comment.length/this.dataPerPage+1
           }
         })
         .catch((e) => {
