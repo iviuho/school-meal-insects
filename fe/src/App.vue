@@ -1,62 +1,62 @@
 <template>
   <v-app>
-    <v-navigation-drawer permanent app>
-      <v-toolbar flat>
-        <v-list>
-          <v-list-tile @click="$router.push('/')">
-            <v-list-tile-title class="title">
-              급식충들 모여라
-            </v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-toolbar>
+      <v-navigation-drawer permanent app>
+        <v-toolbar flat>
+          <v-list>
+            <v-list-tile @click="$router.push('/')">
+              <v-list-tile-title class="title">
+                급식충들 모여라
+              </v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-toolbar>
 
-      <v-divider/>
+        <v-divider/>
 
-      <v-toolbar flat class="transparent">
-        <v-list class="pa-0">
-          <v-list-tile avatar @click="logoutDialog = true" v-if="isAuth">
-            <v-list-tile-avatar>
-              <v-icon>done</v-icon>
-            </v-list-tile-avatar>
+        <v-toolbar flat class="transparent">
+          <v-list class="pa-0">
+            <v-list-tile avatar @click="logoutDialog = true" v-if="isAuth">
+              <v-list-tile-avatar>
+                <v-icon>done</v-icon>
+              </v-list-tile-avatar>
+
+              <v-list-tile-content>
+                <v-list-tile-title>{{account.name}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile avatar @click="loginDialog = true" v-else>
+              <v-list-tile-avatar>
+                <v-icon>person</v-icon>
+              </v-list-tile-avatar>
+
+              <v-list-tile-content>
+                <v-list-tile-title>로그인이 필요합니다!</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-toolbar>
+
+        <v-divider/>
+
+        <v-list dense class="pt-0">
+          <v-list-tile
+            v-for="item in items"
+            :key="item.title"
+            :to="item.to"
+          >
+            <v-list-tile-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
 
             <v-list-tile-content>
-              <v-list-tile-title>{{account.name}}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-
-          <v-list-tile avatar @click="loginDialog = true" v-else>
-            <v-list-tile-avatar>
-              <v-icon>person</v-icon>
-            </v-list-tile-avatar>
-
-            <v-list-tile-content>
-              <v-list-tile-title>로그인이 필요합니다!</v-list-tile-title>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
-      </v-toolbar>
-
-      <v-divider/>
-
-      <v-list dense class="pt-0">
-        <v-list-tile
-          v-for="item in items"
-          :key="item.title"
-          :to="item.to"
-        >
-          <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
-
-          <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
+      </v-navigation-drawer>
     <v-content style="background-color: #FAFAFA;">
-      <router-view :isAuth="isAuth" :account="account"/>
+      <router-view/>
 
       <v-dialog v-model="logoutDialog" max-width="600px">
         <v-card>
