@@ -215,14 +215,7 @@ export default {
           this.text = '로그인에 성공했습니다'
           this.snackbar = true
 
-          console.log(r.data)
-
-          this.account.name = r.data.name
-          this.account.id = r.data.id
-          this.account.pw = r.data.pw
-          this.account.likes = r.data.likes
-          this.account.dislikes = r.data.dislikes
-
+          this.account = r.data
           this.isAuth = true
         })
         .catch(e => {

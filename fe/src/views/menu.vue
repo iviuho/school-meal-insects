@@ -132,11 +132,8 @@ export default {
           this.dislike = r.data.dislike
           this.date = r.data.frequency
           this.comment = r.data.comments
-          if (this.comment.length % this.dataPerPage === 0) {
-            this.pagelength = this.comment.length / this.dataPerPage
-          } else {
-            this.pagelength = this.comment.length / this.dataPerPage + 1
-          }
+
+          this.pagelength = Math.ceil(this.comment.length / this.dataPerPage)
         })
         .catch((e) => {
           console.error(e.message)
