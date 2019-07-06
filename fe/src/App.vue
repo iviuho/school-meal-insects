@@ -84,7 +84,8 @@
                   <v-text-field v-model="pw" label="비밀번호"
                   :append-icon="pwToggle ? 'visibility' : 'visibility_off'"
                   :type="pwToggle ? 'text' : 'password'"
-                  @click:append="pwToggle = !pwToggle"></v-text-field>
+                  @click:append="pwToggle = !pwToggle"
+                  @keypress.enter="toLogin"></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -114,7 +115,8 @@
                   <v-text-field v-model="pw" label="비밀번호"
                   :append-icon="pwToggle ? 'visibility' : 'visibility_off'"
                   :type="pwToggle ? 'text' : 'password'"
-                  @click:append="pwToggle = !pwToggle"></v-text-field>
+                  @click:append="pwToggle = !pwToggle"
+                  @keypress.enter="toSignup"></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -154,7 +156,10 @@ export default {
       failColor: 'rgba(255, 0, 0, 0.7)',
       account: {
         'name': '',
-        'id': ''
+        'id': '',
+        'pw': '',
+        'likes': [],
+        'dislikes': []
       },
       items: [
         {
@@ -185,6 +190,8 @@ export default {
     toLogout () {
       this.account.name = ''
       this.account.id = ''
+      this.account.pw = ''
+
       this.isAuth = false
       this.logoutDialog = false
 
@@ -208,8 +215,14 @@ export default {
           this.text = '로그인에 성공했습니다'
           this.snackbar = true
 
+          console.log(r.data)
+
           this.account.name = r.data.name
           this.account.id = r.data.id
+          this.account.pw = r.data.pw
+          this.account.likes = r.data.likes
+          this.account.dislikes = r.data.dislikes
+
           this.isAuth = true
         })
         .catch(e => {

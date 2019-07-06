@@ -99,7 +99,10 @@ export default {
       nick: [],
       comment: [],
       author: '',
-      content: ''
+      content: '',
+      valid: '',
+      writeaut: '',
+      writecom: ''
     }
   },
   mounted () {
