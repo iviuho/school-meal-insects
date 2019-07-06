@@ -150,6 +150,7 @@ export default {
           })
             .then((r) => {
               console.log(r)
+              this.account.likes.push(this.id)
               this.getData()
             })
             .catch((e) => {
