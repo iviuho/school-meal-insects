@@ -28,20 +28,12 @@
           </v-list>
         </div>
       </div>
-      <div class="comment">
+      <div v-if="isAuth" class="comment">
         <v-form
           ref="form"
           v-model="valid"
           lazy-validation
         >
-          <v-text-field
-            v-model="writeaut"
-            label="Nickname"
-            :counter="10"
-            maxlength="10"
-            :rules="[v => !!v || 'ID is required']"
-            required
-          ></v-text-field>
           <v-text-field
             v-model="writecom"
             :counter="30"
@@ -170,7 +162,7 @@ export default {
     validate () {
       if (this.$refs.form.validate()) {
         this.snackbar = true
-        this.postComment(this.id, this.writeaut, this.writecom)
+        this.postComment(this.id, this.account.name, this.writecom)
         this.$refs.form.reset()
         this.getData()
       }
