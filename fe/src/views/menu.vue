@@ -141,16 +141,18 @@ export default {
         })
     },
     postReq (name, order) {
+      var voted = this.account.likes.includes(this.id)
+
       if (this.isAuth) {
         const baseURI = 'http://localhost:3000/menu/'
-        if (!(this.account.likes.includes(this.id))) {
+        if (!voted) {
           this.$http.post(baseURI + name, {
-            order: order
+            'order': order,
+            'id': this.account.id
           })
             .then((r) => {
               console.log(r)
               this.$emit('changeData', this.id)
-              this.account.likes.push(this.id)
               this.getData()
             })
             .catch((e) => {
