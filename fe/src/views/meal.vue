@@ -37,12 +37,16 @@
           </v-window-item>
         </v-window>
       </v-flex>
+      <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="timeout" top>
+        {{text}}
+      </v-snackbar>
     </v-layout>
   </v-container>
 </template>
 
 <script>
 export default {
+  props: ['isAuth', 'account'],
   data () {
     return {
       posts: [],
@@ -52,7 +56,11 @@ export default {
         '저녁': []
       },
       items: ['아침', '점심', '저녁'],
-      window: 0
+      window: 0,
+      snackbar: false,
+      timeout: 3000,
+      snackbarColor: '',
+      text: ''
     }
   },
   mounted () {
@@ -75,17 +83,35 @@ export default {
       this.$router.push(`menu/${menu}`)
     },
     postReq (name, order) {
-      const baseURI = 'http://localhost:3000/menu/'
-      this.$http.post(baseURI + name, {
-        order: order
-      })
-        .then((r) => {
-          console.log(r)
+      if (this.isAuth) {
+        const baseURI = 'http://localhost:3000/menu/'
+        var value
+        var voted = this.account[order + 's'].includes(this.id)
+
+        if (!voted) {
+          value = 1
+          this.$emit('changeData', order, this.id)
+        } else {
+          value = -1
+          this.$emit('exceptData', order, this.id)
+        }
+
+        this.$http.post(baseURI + name, {
+          'order': order,
+          'id': this.account.id,
+          'value': value
         })
-        .catch((e) => {
-          console.error(e.message)
-        })
-    }
+          .then(r => {
+            this.getData()
+          })
+          .catch(e => console.error(e))
+      }
+      else {
+        this.snackbarColor = 'error'
+        this.text = '로그인을 해주세요'
+        this.snackbar = true
+      }
+    },
   }
 }
 </script>

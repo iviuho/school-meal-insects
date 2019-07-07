@@ -81,6 +81,9 @@
           ></v-pagination>
         </v-list>
       </div>
+      <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="timeout" top>
+        {{text}}
+      </v-snackbar>
     </v-flex>
   </v-layout>
 </template>
@@ -103,7 +106,11 @@ export default {
       content: '',
       valid: '',
       writeaut: '',
-      writecom: ''
+      writecom: '',
+      snackbar: false,
+      timeout: 3000,
+      snackbarColor: '',
+      text: ''
     }
   },
   mounted () {
@@ -163,6 +170,11 @@ export default {
           })
           .catch(e => console.error(e))
       }
+      else {
+        this.snackbarColor = 'error'
+        this.text = '로그인을 해주세요'
+        this.snackbar = true
+      }
     },
     postComment (name, aut, con) {
       const baseURI = 'http://localhost:3000/menu/'
@@ -173,6 +185,9 @@ export default {
       })
         .then((r) => {
           this.getData()
+          this.snackbarColor = 'success'
+          this.text = '댓글이 달렸습니다'
+          this.snackbar = true
         })
         .catch((e) => {
           console.error(e.message)
