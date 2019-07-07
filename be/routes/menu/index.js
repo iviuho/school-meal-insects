@@ -37,13 +37,19 @@ router.post('/:menuName', function(req, res, next) {
         else {
             var method = '$pull';
         }
+
+        // var likes;
+        // var dislikes;
         
-        User.findOneAndUpdate({'id': req.body.id}, {[method]: {[order + "s"]: req.params.menuName}})
-        .then(r => {})
+        User.findOneAndUpdate({'id': req.body.id}, {[method]: {[order + "s"]: req.params.menuName}}, {'new': true})
+        .then(r => {
+            // likes = r.likes;
+            // dislikes = r.dislikes;
+        })
         .catch(e => console.error(e));
 
         Menu.updateOne({'name': req.params.menuName}, {'$inc': {[order]: value}}).then(r => {
-            res.send({'success': Boolean(r.nModified)});
+            res.send({'success': Boolean(r.nModified), 'likes': likes, 'dislikes': dislikes});
         });
     }
     else if (order === 'comment') {

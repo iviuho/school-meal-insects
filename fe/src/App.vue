@@ -199,6 +199,8 @@ export default {
       this.account.name = ''
       this.account.id = ''
       this.account.pw = ''
+      this.account.likes = []
+      this.account.dislikes = []
 
       this.isAuth = false
       this.logoutDialog = false
@@ -272,22 +274,18 @@ export default {
       this.id = ''
       this.pw = ''
     },
-    changeData (data, order) {
+    changeData (order, data) {
       if (order === 'like') {
         this.account.likes.push(data)
-        console.log(this.account.likes)
       } else if (order === 'dislike') {
         this.account.dislikes.push(data)
-        console.log(this.account.dislikes)
       }
     },
-    exceptData (data, order) {
+    exceptData (order, data) {
       if (order === 'like') {
         this.account.likes.splice(this.account.likes.indexOf(data), 1)
-        console.log(this.account.likes)
       } else if (order === 'dislike') {
         this.account.dislikes.splice(this.account.likes.indexOf(data), 1)
-        console.log(this.account.dislikes)
       }
     }
   }
