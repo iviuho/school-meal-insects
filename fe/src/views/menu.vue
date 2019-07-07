@@ -9,14 +9,14 @@
           <v-btn v-if="account.likes.includes(this.id)" icon large @click="postReq(id, 'like')" style="width:64px; height:64px;">
             <v-icon color="success" size="64">thumb_up</v-icon>
           </v-btn>
-          <v-btn v-else icon large @click="postReq(id, 'like')" style="width:64px; height:64px;">
+          <v-btn v-else-if="!account.likes.includes(this.id)" icon large @click="postReq(id, 'like')" style="width:64px; height:64px;">
             <v-icon size="64">thumb_up</v-icon>
           </v-btn>
           <p><strong>&nbsp;{{like}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></p>
           <v-btn v-if="account.dislikes.includes(this.id)" icon large @click="postReq(id, 'dislike')" style="width:64px; height:64px;">
             <v-icon color="error" size="64">thumb_down</v-icon>
           </v-btn>
-          <v-btn v-else icon large @click="postReq(id, 'dislike')" style="width:64px; height:64px;">
+          <v-btn v-else-if="!account.dislikes.includes(this.id)" icon large @click="postReq(id, 'dislike')" style="width:64px; height:64px;">
             <v-icon size="64">thumb_down</v-icon>
           </v-btn>
           <p><strong>&nbsp;{{dislike}}&nbsp;</strong></p>
@@ -141,23 +141,36 @@ export default {
         })
     },
     postReq (name, order) {
-      var voted = this.account.likes.includes(this.id)
-
       if (this.isAuth) {
         const baseURI = 'http://localhost:3000/menu/'
-        if (!voted) {
-          this.$http.post(baseURI + name, {
-            'order': order,
-            'id': this.account.id
-          })
-            .then((r) => {
-              console.log(r)
-              this.$emit('changeData', this.id)
-              this.getData()
+
+        if (order === 'like') {
+          if (!(this.account.likes.includes(this.id))) {
+            this.$http.post(baseURI + name, {
+              'order': order,
+              'id': this.account.id
             })
-            .catch((e) => {
-              console.error(e.message)
+              .then(r => {
+                this.$emit('changeData', this.id, order)
+                this.getData()
+                console.log('this.account.likes', this.account.likes)
+              })
+              .catch(e => console.error(e))
+          }
+        } else if (order === 'dislike') {
+          if (!(this.account.dislikes.includes(this.id))) {
+            this.$http.post(baseURI + name, {
+              'order': order,
+              'id': this.account.id,
+              'value': -1
             })
+              .then(r => {
+                this.$emit('exceptData', this.id, order)
+                this.getData()
+                console.log('this.account.dislikes', this.account.dislikes)
+              })
+              .catch(e => console.error(e))
+          }
         }
       }
     },

@@ -56,7 +56,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-content style="background-color: #FAFAFA;">
-      <router-view :isAuth="isAuth" :account="account" @changeData="changeData"/>
+      <router-view :isAuth="isAuth" :account="account" @changeData="changeData" @exceptData="exceptData"/>
 
       <v-dialog v-model="logoutDialog" max-width="600px">
         <v-card>
@@ -272,9 +272,23 @@ export default {
       this.id = ''
       this.pw = ''
     },
-    changeData (data) {
-      this.account.likes.push(data)
-      console.log(this.account.likes)
+    changeData (data, order) {
+      if (order === 'like') {
+        this.account.likes.push(data)
+        console.log(this.account.likes)
+      } else if (order === 'dislike') {
+        this.account.dislikes.push(data)
+        console.log(this.account.dislikes)
+      }
+    },
+    exceptData (data, order) {
+      if (order === 'like') {
+        this.account.likes.splice(this.account.likes.indexOf(data), 1)
+        console.log(this.account.likes)
+      } else if (order === 'dislike') {
+        this.account.dislikes.splice(this.account.likes.indexOf(data), 1)
+        console.log(this.account.dislikes)
+      }
     }
   }
 }
