@@ -153,7 +153,6 @@ export default {
       timeout: 3000,
       snackbarColor: '',
       text: '',
-      failColor: 'rgba(255, 0, 0, 0.7)',
       account: {
         'name': '',
         'id': '',
@@ -205,14 +204,14 @@ export default {
       this.isAuth = false
       this.logoutDialog = false
 
-      this.snackbarColor = 'success'
+      this.snackbarColor = 'error'
       this.text = '로그아웃 되었습니다'
       this.snackbar = true
     },
     toLogin () {
       if (this.id === '' || this.pw === '') {
         console.log('ID or password is empty!')
-        this.snackbarColor = this.failColor
+        this.snackbarColor = 'error'
         this.text = 'ID 혹은 비밀번호가 비어있습니다'
         this.snackbar = true
         return
@@ -230,7 +229,7 @@ export default {
         })
         .catch(e => {
           // 실패 시
-          this.snackbarColor = this.failColor
+          this.snackbarColor = 'error'
           this.text = '로그인에 실패했습니다'
           this.snackbar = true
         })
@@ -246,7 +245,7 @@ export default {
     toSignup () {
       if (this.name === '' || this.id === '' || this.pw === '') {
         console.log('Name or ID or password is empty!')
-        this.snackbarColor = this.failColor
+        this.snackbarColor = 'error'
         this.text = '비어있는 항목이 있습니다'
         this.snackbar = true
         return
@@ -261,7 +260,7 @@ export default {
         })
         .catch(e => {
           // 실패 시
-          this.snackbarColor = this.failColor
+          this.snackbarColor = 'error'
           this.text = '회원가입에 실패했습니다'
           this.snackbar = true
         })

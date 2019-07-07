@@ -16,7 +16,10 @@ router.get('/', function(req, res, next) {
 
 router.get('/:menuName', function(req, res, next) {
     Menu.findOne({'name': req.params.menuName}).select({'_id': false, '__v': false}).then(r => {
-        res.send(r);
+        var data = r;
+        data.comments.reverse();
+
+        res.send(data);
     });
 });
 
