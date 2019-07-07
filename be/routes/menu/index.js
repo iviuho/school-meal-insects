@@ -52,7 +52,7 @@ router.post('/:menuName', function(req, res, next) {
         .catch(e => console.error(e));
 
         Menu.updateOne({'name': req.params.menuName}, {'$inc': {[order]: value}}).then(r => {
-            res.send({'success': Boolean(r.nModified), 'likes': likes, 'dislikes': dislikes});
+            res.send({'success': Boolean(r.nModified)});
         });
     }
     else if (order === 'comment') {

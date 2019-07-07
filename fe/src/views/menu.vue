@@ -169,10 +169,9 @@ export default {
             this.getData()
           })
           .catch(e => console.error(e))
-      }
-      else {
+      } else {
         this.snackbarColor = 'error'
-        this.text = '로그인을 해주세요'
+        this.text = '추천, 비추천 기능은 로그인 후에 가능합니다'
         this.snackbar = true
       }
     },
@@ -186,7 +185,7 @@ export default {
         .then((r) => {
           this.getData()
           this.snackbarColor = 'success'
-          this.text = '댓글이 달렸습니다'
+          this.text = '댓글이 작성되었습니다'
           this.snackbar = true
         })
         .catch((e) => {

@@ -18,10 +18,16 @@
                     <h3>{{menu}}</h3>
                 </v-card-title>
                 <v-card-actions class="justify-center">
-                  <v-btn icon @click="postReq(menu, 'like')">
+                  <v-btn icon v-if="account.likes.includes(menu)" @click="postReq(menu, 'like')">
+                    <v-icon color="success">thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn v-else icon @click="postReq(menu, 'like')">
                     <v-icon>thumb_up</v-icon>
                   </v-btn>
-                  <v-btn icon @click="postReq(menu, 'dislike')">
+                  <v-btn icon v-if="account.dislikes.includes(menu)" @click="postReq(menu, 'dislike')">
+                    <v-icon color="error">thumb_down</v-icon>
+                  </v-btn>
+                  <v-btn icon v-else @click="postReq(menu, 'dislike')">
                     <v-icon>thumb_down</v-icon>
                   </v-btn>
                 </v-card-actions>
@@ -83,17 +89,19 @@ export default {
       this.$router.push(`menu/${menu}`)
     },
     postReq (name, order) {
+      console.log(this.account)
+
       if (this.isAuth) {
         const baseURI = 'http://localhost:3000/menu/'
         var value
-        var voted = this.account[order + 's'].includes(this.id)
+        var voted = this.account[order + 's'].includes(name)
 
         if (!voted) {
           value = 1
-          this.$emit('changeData', order, this.id)
+          this.$emit('changeData', order, name)
         } else {
           value = -1
-          this.$emit('exceptData', order, this.id)
+          this.$emit('exceptData', order, name)
         }
 
         this.$http.post(baseURI + name, {
@@ -101,17 +109,14 @@ export default {
           'id': this.account.id,
           'value': value
         })
-          .then(r => {
-            this.getData()
-          })
+          .then(r => {})
           .catch(e => console.error(e))
-      }
-      else {
+      } else {
         this.snackbarColor = 'error'
-        this.text = '로그인을 해주세요'
+        this.text = '추천, 비추천 기능은 로그인 후에 가능합니다'
         this.snackbar = true
       }
-    },
+    }
   }
 }
 </script>
