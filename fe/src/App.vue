@@ -55,14 +55,16 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
+
     <v-content style="background-color: #FAFAFA;">
-      <router-view :isAuth="isAuth" :account="account" @changeData="changeData" @exceptData="exceptData"/>
+      <transition>
+        <router-view :isAuth="isAuth" :account="account" @changeData="changeData" @exceptData="exceptData"/>
+      </transition>
 
       <v-dialog v-model="logoutDialog" max-width="600px">
         <v-card>
           <v-card-title class="headline">로그아웃</v-card-title>
           <v-card-text>로그아웃 하시겠습니까?</v-card-text>
-
           <v-card-actions>
             <v-spacer/>
             <v-btn color="red lighter-1" dark @click="logoutDialog = false">취소</v-btn>

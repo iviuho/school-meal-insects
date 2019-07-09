@@ -33,7 +33,7 @@
                 </v-card-actions>
               </v-card>
             </v-container>
-            <v-container column fluid>
+            <v-container column fluid v-else>
               <v-card class="rounded-card" min-width="300">
                 <v-card-title class="justify-center" primary-title>
                     <h3>표시할 급식 정보가 없습니다.</h3>
