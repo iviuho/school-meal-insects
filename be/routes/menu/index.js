@@ -29,40 +29,38 @@ router.post('/:menuName', function(req, res, next) {
     if (order === 'like' || order === 'dislike') {
         if (req.body.hasOwnProperty('value')) {
             var value = req.body.value;
-        }
-        else {
+        } else {
             var value = 1;
         }
 
         if (value > 0) {
             var method = '$push';
-        }
-        else {
+        } else {
             var method = '$pull';
         }
-
-        // var likes;
-        // var dislikes;
         
         User.findOneAndUpdate({'id': req.body.id}, {[method]: {[order + "s"]: req.params.menuName}}, {'new': true})
-        .then(r => {
-            // likes = r.likes;
-            // dislikes = r.dislikes;
-        })
+        .then(r => {})
         .catch(e => console.error(e));
 
         Menu.updateOne({'name': req.params.menuName}, {'$inc': {[order]: value}}).then(r => {
             res.send({'success': Boolean(r.nModified)});
         });
-    }
-    else if (order === 'comment') {
+    } else if (order === 'comment') {
         var comment = new Comment();
+        comment.id = req.body.id;
         comment.author = req.body.author;
         comment.content = req.body.content;
 
-        Menu.updateOne({'name': req.params.menuName}, {'$push': {'comments': comment}}).then(r => {
-            res.send({'success': Boolean(r.nModified)});
-        })
+        Menu.updateOne({'name': req.params.menuName}, {'$push': {'comments': comment}})
+        .then(r => res.send({'success': Boolean(r.nModified)}))
+        .catch(e => console.error(e));
+    } else if (order === 'remove') {
+        var _id = req.body._id;
+
+        Menu.updateOne({'name': req.params.menuName}, {'$pull': {'comments': {'_id': _id}}})
+        .then(r => res.send({'success': Boolean(r.nModified)}))
+        .catch(e => console.error(e));
     }
 });
 

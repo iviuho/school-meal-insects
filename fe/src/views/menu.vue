@@ -5,18 +5,18 @@
         <div class="column_center">
           <br><h4>{{id}}</h4><br>
 
-          <v-btn v-if="account.likes.includes(id)" icon large @click="postReq(id, 'like')" style="width:64px; height:64px;">
+          <v-btn v-if="account.likes.includes(id)" icon large @click="postReq('like')" style="width:64px; height:64px;">
             <v-icon color="success" size="64">thumb_up</v-icon>
           </v-btn>
-          <v-btn v-else icon large @click="postReq(id, 'like')" style="width:64px; height:64px;">
+          <v-btn v-else icon large @click="postReq('like')" style="width:64px; height:64px;">
             <v-icon size="64">thumb_up</v-icon>
           </v-btn>
           <p><strong>&nbsp;{{like}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></p>
 
-          <v-btn v-if="account.dislikes.includes(id)" icon large @click="postReq(id, 'dislike')" style="width:64px; height:64px;">
+          <v-btn v-if="account.dislikes.includes(id)" icon large @click="postReq('dislike')" style="width:64px; height:64px;">
             <v-icon color="error" size="64">thumb_down</v-icon>
           </v-btn>
-          <v-btn v-else icon large @click="postReq(id, 'dislike')" style="width:64px; height:64px;">
+          <v-btn v-else icon large @click="postReq('dislike')" style="width:64px; height:64px;">
             <v-icon size="64">thumb_down</v-icon>
           </v-btn>
           <p><strong>&nbsp;{{dislike}}&nbsp;</strong></p>
@@ -69,12 +69,30 @@
                 <v-list-tile-title>{{ item.author }}</v-list-tile-title>
                 <v-list-tile-sub-title class="text--primary">{{ item.content }}</v-list-tile-sub-title>
               </v-list-tile-content>
+              <v-list-tile-action>
+                <v-btn icon right v-if="account.id === comment[index].id" @click="removeDialog = true">
+                  <v-icon>remove_circle</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+
+              <v-dialog v-model="removeDialog" max-width="600px">
+                <v-card>
+                  <v-card-title class="headline">댓글 삭제</v-card-title>
+                  <v-card-text>해당 댓글을 삭제 하시겠습니까?</v-card-text>
+                  <v-card-actions>
+                    <v-spacer/>
+                    <v-btn color="red lighter-1" dark @click="removeDialog = false">취소</v-btn>
+                    <v-btn color="green lighter-1" dark @click="removeComment(index)">삭제</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </v-list-tile>
             <v-divider v-if="index + 1 < comment.length" :key="`divider-${index}`"></v-divider>
           </template>
           <br>
           <br>
           <v-pagination
+            v-if="comment.length > 0"
             v-model="page"
             :length="pagelength"
             :total-visible="5"
@@ -87,13 +105,13 @@
     </v-flex>
   </v-layout>
 </template>
-<script>
-// import router from '../router'
 
+<script>
 export default {
   props: ['id', 'isAuth', 'account'],
   data () {
     return {
+      url: 'http://localhost:3000/menu/',
       page: 1,
       pagelength: 0,
       dataPerPage: 4,
@@ -110,7 +128,8 @@ export default {
       snackbar: false,
       timeout: 3000,
       snackbarColor: '',
-      text: ''
+      text: '',
+      removeDialog: false
     }
   },
   mounted () {
@@ -132,9 +151,8 @@ export default {
   },
   methods: {
     getData () {
-      const baseURI = `http://localhost:3000/menu/${this.id}`
-      this.$http.get(`${baseURI}`)
-        .then((r) => {
+      this.$http.get(this.url + this.id)
+        .then(r => {
           this.like = r.data.like
           this.dislike = r.data.dislike
           this.date = r.data.frequency
@@ -146,9 +164,8 @@ export default {
           console.error(e.message)
         })
     },
-    postReq (name, order) {
+    postReq (order) {
       if (this.isAuth) {
-        const baseURI = 'http://localhost:3000/menu/'
         var value
         var voted = this.account[order + 's'].includes(this.id)
 
@@ -160,7 +177,7 @@ export default {
           this.$emit('exceptData', order, this.id)
         }
 
-        this.$http.post(baseURI + name, {
+        this.$http.post(this.url + this.id, {
           'order': order,
           'id': this.account.id,
           'value': value
@@ -175,11 +192,11 @@ export default {
         this.snackbar = true
       }
     },
-    postComment (name, aut, con) {
-      const baseURI = 'http://localhost:3000/menu/'
-      this.$http.post(`${baseURI + name}`, {
+    postComment (con) {
+      this.$http.post(this.url + this.id, {
         order: 'comment',
-        author: aut,
+        id: this.account.id,
+        author: this.account.name,
         content: con
       })
         .then((r) => {
@@ -188,14 +205,27 @@ export default {
           this.text = '댓글이 작성되었습니다'
           this.snackbar = true
         })
-        .catch((e) => {
-          console.error(e.message)
+        .catch((e) => console.error(e))
+    },
+    removeComment (index) {
+      this.$http.post(this.url + this.id, {
+        'order': 'remove',
+        '_id': this.comment[index]._id
+      })
+        .then(r => {
+          this.getData()
+          this.snackbarColor = 'success'
+          this.text = '댓글을 성공적으로 삭제했습니다'
+          this.snackbar = true
         })
+        .catch(e => console.error(e))
+
+      this.removeDialog = false
     },
     validate () {
       if (this.$refs.form.validate()) {
         this.snackbar = true
-        this.postComment(this.id, this.account.name, this.writecom)
+        this.postComment(this.writecom)
         this.$refs.form.reset()
         this.getData()
       }
@@ -219,8 +249,6 @@ export default {
   h1 {
     display: inline
   }
-  /* .row {
-  } */
   .column_center {
     position: relative;
     width: 1300px;
