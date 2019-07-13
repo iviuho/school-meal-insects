@@ -52,7 +52,7 @@
 
 <script>
 export default {
-  props: ['isAuth', 'account'],
+  props: ['account'],
   data () {
     return {
       posts: [],
@@ -89,9 +89,7 @@ export default {
       this.$router.push(`menu/${menu}`)
     },
     postReq (name, order) {
-      console.log(this.account)
-
-      if (this.isAuth) {
+      if (this.$session.exists()) {
         const baseURI = 'http://localhost:3000/menu/'
         var value
         var voted = this.account[order + 's'].includes(name)

@@ -15,7 +15,7 @@
 
       <v-toolbar flat class="transparent">
         <v-list class="pa-0">
-          <v-list-tile avatar @click="logoutDialog = true" v-if="isAuth">
+          <v-list-tile avatar @click="logoutDialog = true" v-if="$session.exists()">
             <v-list-tile-avatar>
               <v-icon>done</v-icon>
             </v-list-tile-avatar>
@@ -58,7 +58,7 @@
 
     <v-content style="background-color: #FAFAFA;">
       <transition>
-        <router-view :isAuth="isAuth" :account="account" @changeData="changeData" @exceptData="exceptData"/>
+        <router-view :account="account" @changeData="changeData" @exceptData="exceptData"/>
       </transition>
 
       <v-dialog v-model="logoutDialog" max-width="600px">
@@ -143,10 +143,10 @@ export default {
   name: 'App',
   data () {
     return {
+      account: this.setAccount(),
       name: '',
       id: '',
       pw: '',
-      isAuth: false,
       logoutDialog: false,
       loginDialog: false,
       signupDialog: false,
@@ -155,13 +155,6 @@ export default {
       timeout: 3000,
       snackbarColor: '',
       text: '',
-      account: {
-        'name': '',
-        'id': '',
-        'pw': '',
-        'likes': [],
-        'dislikes': []
-      },
       items: [
         {
           icon: 'local_dining',
@@ -197,13 +190,9 @@ export default {
       this.resetInput()
     },
     toLogout () {
-      this.account.name = ''
-      this.account.id = ''
-      this.account.pw = ''
-      this.account.likes = []
-      this.account.dislikes = []
+      this.$session.destroy()
+      this.account = this.setAccount()
 
-      this.isAuth = false
       this.logoutDialog = false
 
       this.snackbarColor = 'error'
@@ -226,11 +215,13 @@ export default {
           this.text = '로그인에 성공했습니다'
           this.snackbar = true
 
-          this.account = r.data
-          this.isAuth = true
+          this.$session.set('account', r.data)
+          this.account = this.setAccount()
         })
         .catch(e => {
           // 실패 시
+          console.error(e)
+
           this.snackbarColor = 'error'
           this.text = '로그인에 실패했습니다'
           this.snackbar = true
@@ -276,18 +267,43 @@ export default {
       this.pw = ''
     },
     changeData (order, data) {
+      var account = this.$session.get('account')
+
       if (order === 'like') {
-        this.account.likes.push(data)
+        account.likes.push(data)
       } else if (order === 'dislike') {
-        this.account.dislikes.push(data)
+        account.dislikes.push(data)
       }
+
+      this.$session.set('account', account)
+      this.account = this.setAccount()
     },
     exceptData (order, data) {
+      var account = this.$session.get('account')
+
       if (order === 'like') {
-        this.account.likes.splice(this.account.likes.indexOf(data), 1)
+        account.likes.splice(account.likes.indexOf(data), 1)
       } else if (order === 'dislike') {
-        this.account.dislikes.splice(this.account.likes.indexOf(data), 1)
+        account.dislikes.splice(account.dislikes.indexOf(data), 1)
       }
+
+      this.$session.set('account', account)
+      this.account = this.setAccount()
+    },
+    setAccount () {
+      var account = this.$session.get('account')
+
+      if (account === undefined) {
+        account = {
+          'name': '',
+          'id': '',
+          'pw': '',
+          'likes': [],
+          'dislikes': []
+        }
+      }
+
+      return account
     }
   }
 }
