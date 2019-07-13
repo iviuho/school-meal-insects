@@ -62,7 +62,7 @@ export default {
         '저녁': []
       },
       items: ['아침', '점심', '저녁'],
-      window: 1,
+      window: 0,
       snackbar: false,
       timeout: 3000,
       snackbarColor: '',
@@ -71,14 +71,21 @@ export default {
     }
   },
   mounted () {
-    const today = new Date()
-    const hours = today.getHours();
     this.getMeals()
-
-    console.log(today);
-    console.log(hours);
+    this.setMeal()
   },
   methods: {
+    setMeal () {
+
+      const today = new Date()
+      const hours = today.getHours();
+      if(hours<=13)
+      this.window=2
+      else if(hours<=8)
+      this.window=1
+      console.log(today);
+      console.log(hours);
+    },
     getMeals () {
       const baseURI = 'http://localhost:3000/meal'
       this.$http.get(baseURI)
@@ -86,7 +93,6 @@ export default {
           this.menus['아침'] = result.data.data.breakfast
           this.menus['점심'] = result.data.data.lunch
           this.menus['저녁'] = result.data.data.dinner
-          console.log(this.hours)
         })
         .catch((e) => {
           console.error(e.message)
