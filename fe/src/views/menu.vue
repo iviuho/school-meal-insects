@@ -35,7 +35,7 @@
           </v-list>
         </div>
       </div>
-      <div v-if="isAuth" class="comment">
+      <div v-if="$session.exists()" class="comment">
         <v-form
           ref="form"
           v-model="valid"
@@ -108,7 +108,7 @@
 
 <script>
 export default {
-  props: ['id', 'isAuth', 'account'],
+  props: ['account', 'id'],
   data () {
     return {
       url: 'http://localhost:3000/menu/',
@@ -165,7 +165,7 @@ export default {
         })
     },
     postReq (order) {
-      if (this.isAuth) {
+      if (this.$session.exists()) {
         var value
         var voted = this.account[order + 's'].includes(this.id)
 
