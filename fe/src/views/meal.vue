@@ -62,15 +62,21 @@ export default {
         '저녁': []
       },
       items: ['아침', '점심', '저녁'],
-      window: 0,
+      window: 1,
       snackbar: false,
       timeout: 3000,
       snackbarColor: '',
       text: ''
+      
     }
   },
   mounted () {
+    const today = new Date()
+    const hours = today.getHours();
     this.getMeals()
+
+    console.log(today);
+    console.log(hours);
   },
   methods: {
     getMeals () {
@@ -80,6 +86,7 @@ export default {
           this.menus['아침'] = result.data.data.breakfast
           this.menus['점심'] = result.data.data.lunch
           this.menus['저녁'] = result.data.data.dinner
+          console.log(this.hours)
         })
         .catch((e) => {
           console.error(e.message)
