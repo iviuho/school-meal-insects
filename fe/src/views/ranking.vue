@@ -33,7 +33,7 @@ export default {
     loadData () {
       this.$http.get('http://localhost:3000/ranking/' + this.radioGroup).then(r => {
         r.data.data.forEach(item => {
-          this.chartData.push([item.name, item.like])
+          this.chartData.push([item.name, item[this.radioGroup]])
         })
       })
     },
