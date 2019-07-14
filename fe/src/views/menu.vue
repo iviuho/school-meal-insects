@@ -70,22 +70,10 @@
                 <v-list-tile-sub-title class="text--primary">{{ item.content }}</v-list-tile-sub-title>
               </v-list-tile-content>
               <v-list-tile-action>
-                <v-btn icon right v-if="account.id === comment[index].id" @click="removeDialog = true">
+                <v-btn icon right v-if="account.id === comment[index].id" @click="toRemoveDialog">
                   <v-icon>remove_circle</v-icon>
                 </v-btn>
               </v-list-tile-action>
-
-              <v-dialog v-model="removeDialog" max-width="600px">
-                <v-card>
-                  <v-card-title class="headline">댓글 삭제</v-card-title>
-                  <v-card-text>해당 댓글을 삭제 하시겠습니까?</v-card-text>
-                  <v-card-actions>
-                    <v-spacer/>
-                    <v-btn color="red lighter-1" dark @click="removeDialog = false">취소</v-btn>
-                    <v-btn color="green lighter-1" dark @click="removeComment(index)">삭제</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
             </v-list-tile>
             <v-divider v-if="index + 1 < comment.length" :key="`divider-${index}`"></v-divider>
           </template>
@@ -102,6 +90,17 @@
       <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="timeout" top>
         {{text}}
       </v-snackbar>
+      <v-dialog v-model="removeDialog" max-width="600px">
+        <v-card>
+          <v-card-title class="headline">댓글 삭제</v-card-title>
+          <v-card-text>해당 댓글을 삭제 하시겠습니까?</v-card-text>
+          <v-card-actions>
+            <v-spacer/>
+            <v-btn color="red lighter-1" dark @click="removeDialog = false">취소</v-btn>
+            <v-btn color="green lighter-1" dark @click="removeComment(toRemoveIndex)">삭제</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-flex>
   </v-layout>
 </template>
@@ -129,7 +128,8 @@ export default {
       timeout: 3000,
       snackbarColor: '',
       text: '',
-      removeDialog: false
+      removeDialog: false,
+      toRemoveIndex: null
     }
   },
   mounted () {
@@ -150,6 +150,9 @@ export default {
     }
   },
   methods: {
+    test (index) {
+      console.log('Button clicked', index)
+    },
     getData () {
       this.$http.get(this.url + this.id)
         .then(r => {
@@ -206,6 +209,10 @@ export default {
           this.snackbar = true
         })
         .catch((e) => console.error(e))
+    },
+    toRemoveDialog (index) {
+      this.toRemoveIndex = index
+      this.removeDialog = true
     },
     removeComment (index) {
       this.$http.post(this.url + this.id, {
