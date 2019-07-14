@@ -70,7 +70,7 @@
                 <v-list-tile-sub-title class="text--primary">{{ item.content }}</v-list-tile-sub-title>
               </v-list-tile-content>
               <v-list-tile-action>
-                <v-btn icon right v-if="account.id === comment[index].id" @click="toRemoveDialog">
+                <v-btn icon right v-if="account.id === comment[index].id" @click="toRemoveDialog(index)">
                   <v-icon>remove_circle</v-icon>
                 </v-btn>
               </v-list-tile-action>
@@ -211,7 +211,7 @@ export default {
         .catch((e) => console.error(e))
     },
     toRemoveDialog (index) {
-      this.toRemoveIndex = index
+      this.toRemoveIndex = (this.page - 1) * this.dataPerPage + index
       this.removeDialog = true
     },
     removeComment (index) {
