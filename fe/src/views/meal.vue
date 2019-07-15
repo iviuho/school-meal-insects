@@ -77,9 +77,9 @@ export default {
     setMeal () {
       const today = new Date()
       const hours = today.getHours()
-      if (hours <= 13) {
+      if (hours >= 13) {
         this.window = 2
-      } else if (hours <= 8) {
+      } else if (hours >= 8) {
         this.window = 1
       }
 
