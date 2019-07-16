@@ -10,13 +10,13 @@ import 'chart.js'
 import 'hchs-vue-charts'
 import Chartkick from 'chartkick'
 import VueChartkick from 'vue-chartkick'
-import VueSession from 'vue-session'
+import VueCookies from 'vue-cookies'
 
 Vue.prototype.$http = axios
 
 Vue.use(window.VueCharts)
 Vue.use(VueChartkick, { Chartkick })
-Vue.use(VueSession)
+Vue.use(VueCookies)
 
 Vue.config.productionTip = false
 

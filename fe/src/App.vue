@@ -141,7 +141,7 @@ export default {
   name: 'App',
   data () {
     return {
-      token: '',
+      token: this.$cookies.get('token'),
       account: this.emptyAccount(),
       name: '',
       id: '',
@@ -189,7 +189,8 @@ export default {
       this.resetInput()
     },
     toLogout () {
-      this.token = ''
+      this.$cookies.set('token', '')
+      this.token = this.$cookies.get('token')
       this.account = this.emptyAccount()
 
       this.logoutDialog = false
@@ -213,7 +214,8 @@ export default {
           this.text = '로그인에 성공했습니다'
           this.snackbar = true
 
-          this.token = r.data.accessToken
+          this.$cookies.set('token', r.data.accessToken)
+          this.token = this.$cookies.get('token')
           this.getAccount()
         })
         .catch(e => {
@@ -287,6 +289,11 @@ export default {
           console.log(this.account)
         })
         .catch(e => {})
+    }
+  },
+  mounted () {
+    if (this.token) {
+      this.getAccount()
     }
   }
 }
