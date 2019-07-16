@@ -52,9 +52,10 @@
 
 <script>
 export default {
-  props: ['account'],
+  props: ['account', 'token'],
   data () {
     return {
+      url: 'http://10.120.73.216:3000',
       posts: [],
       menus: {
         '아침': [],
@@ -75,20 +76,21 @@ export default {
   },
   methods: {
     setMeal () {
-      const today = new Date()
-      const hours = today.getHours()
-      if (hours <= 13) {
-        this.window = 2
-      } else if (hours <= 8) {
-        this.window = 1
-      }
+      const standard = [480, 750, 1110]
 
-      console.log(today)
-      console.log(hours)
+      var today = new Date()
+      var hours = today.getHours()
+      var minutes = today.getMinutes()
+
+      for (var i = 0; i < standard.length; i++) {
+        if (hours * 60 + minutes <= standard[i]) {
+          this.window = i
+          break
+        }
+      }
     },
     getMeals () {
-      const baseURI = 'http://localhost:3000/meal'
-      this.$http.get(baseURI)
+      this.$http.get(this.url + '/meal')
         .then((result) => {
           this.menus['아침'] = result.data.data.breakfast
           this.menus['점심'] = result.data.data.lunch
@@ -102,8 +104,7 @@ export default {
       this.$router.push(`menu/${menu}`)
     },
     postReq (name, order) {
-      if (this.$session.exists()) {
-        const baseURI = 'http://localhost:3000/menu/'
+      if (this.token) {
         var value
         var voted = this.account[order + 's'].includes(name)
 
@@ -115,11 +116,10 @@ export default {
           this.$emit('exceptData', order, name)
         }
 
-        this.$http.post(baseURI + name, {
+        this.$http.post(this.url + '/menu/' + name, {
           'order': order,
-          'id': this.account.id,
           'value': value
-        })
+        }, { 'headers': { 'Authorization': this.token } })
           .then(r => {})
           .catch(e => console.error(e))
       } else {

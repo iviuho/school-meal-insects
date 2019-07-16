@@ -15,7 +15,7 @@
 
       <v-toolbar flat class="transparent">
         <v-list class="pa-0">
-          <v-list-tile avatar @click="logoutDialog = true" v-if="$session.exists()">
+          <v-list-tile avatar @click="logoutDialog = true" v-if="account.name">
             <v-list-tile-avatar>
               <v-icon>done</v-icon>
             </v-list-tile-avatar>
@@ -57,9 +57,7 @@
     </v-navigation-drawer>
 
     <v-content style="background-color: #FAFAFA;">
-      <transition>
-        <router-view :account="account" @changeData="changeData" @exceptData="exceptData"/>
-      </transition>
+      <router-view :account="account" :token="token" @changeData="changeData" @exceptData="exceptData"/>
 
       <v-dialog v-model="logoutDialog" max-width="600px">
         <v-card>
@@ -143,7 +141,8 @@ export default {
   name: 'App',
   data () {
     return {
-      account: this.setAccount(),
+      token: '',
+      account: this.emptyAccount(),
       name: '',
       id: '',
       pw: '',
@@ -190,8 +189,8 @@ export default {
       this.resetInput()
     },
     toLogout () {
-      this.$session.destroy()
-      this.account = this.setAccount()
+      this.token = ''
+      this.account = this.emptyAccount()
 
       this.logoutDialog = false
 
@@ -210,16 +209,14 @@ export default {
 
       this.$http.post('http://localhost:3000/auth/login', { 'id': this.id, 'password': this.pw })
         .then(r => {
-          // 성공 시
           this.snackbarColor = 'success'
           this.text = '로그인에 성공했습니다'
           this.snackbar = true
 
-          this.$session.set('account', r.data)
-          this.account = this.setAccount()
+          this.token = r.data.accessToken
+          this.getAccount()
         })
         .catch(e => {
-          // 실패 시
           console.error(e)
 
           this.snackbarColor = 'error'
@@ -246,13 +243,11 @@ export default {
 
       this.$http.post('http://localhost:3000/auth/signup', { 'name': this.name, 'id': this.id, 'password': this.pw })
         .then(r => {
-          // 성공 시
           this.snackbarColor = 'success'
           this.text = '성공적으로 가입됐습니다'
           this.snackbar = true
         })
         .catch(e => {
-          // 실패 시
           this.snackbarColor = 'error'
           this.text = '회원가입에 실패했습니다'
           this.snackbar = true
@@ -267,43 +262,31 @@ export default {
       this.pw = ''
     },
     changeData (order, data) {
-      var account = this.$session.get('account')
-
-      if (order === 'like') {
-        account.likes.push(data)
-      } else if (order === 'dislike') {
-        account.dislikes.push(data)
+      if (['like', 'dislike'].includes(order)) {
+        this.account[order + 's'].push(data)
       }
-
-      this.$session.set('account', account)
-      this.account = this.setAccount()
     },
     exceptData (order, data) {
-      var account = this.$session.get('account')
-
-      if (order === 'like') {
-        account.likes.splice(account.likes.indexOf(data), 1)
-      } else if (order === 'dislike') {
-        account.dislikes.splice(account.dislikes.indexOf(data), 1)
+      if (['like', 'dislike'].includes(order)) {
+        this.account[order + 's'].splice(this.account[order + 's'].indexOf(data), 1)
       }
-
-      this.$session.set('account', account)
-      this.account = this.setAccount()
     },
-    setAccount () {
-      var account = this.$session.get('account')
-
-      if (account === undefined) {
-        account = {
-          'name': '',
-          'id': '',
-          'pw': '',
-          'likes': [],
-          'dislikes': []
-        }
+    emptyAccount () {
+      return {
+        name: '',
+        id: '',
+        password: '',
+        likes: [],
+        dislikes: []
       }
-
-      return account
+    },
+    getAccount () {
+      this.$http.get('http://10.120.73.216:3000/auth/user', { 'headers': { 'Authorization': this.token } })
+        .then(r => {
+          this.account = r.data
+          console.log(this.account)
+        })
+        .catch(e => {})
     }
   }
 }

@@ -1,9 +1,18 @@
+const auth = require('../auth/authorization');
 const express = require('express');
 const Comment = require('../../models/menu').commentSchema;
 const Menu = require('../../models/menu').menuSchema;
 const User = require('../../models/user');
 
 const router = express.Router();
+
+function getUserFromToken (token) {
+    try {
+        return auth.verify(token);
+    } catch (e) {
+        return null;
+    }
+}
 
 router.get('/', function(req, res, next) {
     Menu.find().select({'_id': false, '__v': false}).then(r => {
@@ -24,6 +33,7 @@ router.get('/:menuName', function(req, res, next) {
 });
 
 router.post('/:menuName', function(req, res, next) {
+    const user = getUserFromToken(req.headers.authorization);
     var order = req.body.order;
 
     if (order === 'like' || order === 'dislike') {
@@ -38,8 +48,8 @@ router.post('/:menuName', function(req, res, next) {
         } else {
             var method = '$pull';
         }
-        
-        User.findOneAndUpdate({'id': req.body.id}, {[method]: {[order + "s"]: req.params.menuName}}, {'new': true})
+
+        User.findOneAndUpdate({'id': user.id, 'password': user.password}, {[method]: {[order + "s"]: req.params.menuName}}, {'new': true})
         .then(r => {})
         .catch(e => console.error(e));
 
@@ -48,13 +58,17 @@ router.post('/:menuName', function(req, res, next) {
         });
     } else if (order === 'comment') {
         var comment = new Comment();
-        comment.id = req.body.id;
-        comment.author = req.body.author;
-        comment.content = req.body.content;
 
-        Menu.updateOne({'name': req.params.menuName}, {'$push': {'comments': comment}})
-        .then(r => res.send({'success': Boolean(r.nModified)}))
-        .catch(e => console.error(e));
+        User.findOne({'id': user.id, 'password': user.password})
+        .then(r => {
+            comment.id = r.id;
+            comment.author = r.name;
+            comment.content = req.body.content;
+
+            Menu.updateOne({'name': req.params.menuName}, {'$push': {'comments': comment}})
+            .then(r => res.send({'success': Boolean(r.nModified)}))
+            .catch(e => console.error(e));
+        })
     } else if (order === 'remove') {
         var _id = req.body._id;
 

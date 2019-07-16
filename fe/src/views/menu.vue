@@ -35,7 +35,7 @@
           </v-list>
         </div>
       </div>
-      <div v-if="$session.exists()" class="comment">
+      <div v-if="token" class="comment">
         <v-form
           ref="form"
           v-model="valid"
@@ -107,10 +107,10 @@
 
 <script>
 export default {
-  props: ['account', 'id'],
+  props: ['account', 'id', 'token'],
   data () {
     return {
-      url: 'http://localhost:3000/menu/',
+      url: 'http://10.120.73.216:3000/menu/',
       page: 1,
       pagelength: 0,
       dataPerPage: 4,
@@ -168,7 +168,7 @@ export default {
         })
     },
     postReq (order) {
-      if (this.$session.exists()) {
+      if (this.token) {
         var value
         var voted = this.account[order + 's'].includes(this.id)
 
@@ -182,9 +182,8 @@ export default {
 
         this.$http.post(this.url + this.id, {
           'order': order,
-          'id': this.account.id,
           'value': value
-        })
+        }, { 'headers': { 'Authorization': this.token } })
           .then(r => {
             this.getData()
           })
@@ -198,10 +197,8 @@ export default {
     postComment (con) {
       this.$http.post(this.url + this.id, {
         order: 'comment',
-        id: this.account.id,
-        author: this.account.name,
         content: con
-      })
+      }, { 'headers': { 'Authorization': this.token } })
         .then((r) => {
           this.getData()
           this.snackbarColor = 'success'
