@@ -9,9 +9,8 @@
       </v-layout>
     </v-layout>
     <v-layout align-center column>
-      
-      <div v-if="time>=13">
-        <v-card style="float: left; margin-left: 15px; margin-right:15px; margin-left: 15px; margin-right:15px;"> 
+      <div v-if="time>=13" style="display: flex;">
+        <v-card class="round"> 
           <v-card-title>
             <h2>아침</h2>
           </v-card-title>
@@ -44,7 +43,7 @@
             </v-card>
           </v-container>
         </v-card>
-        <v-card style="float: left; margin-left: 15px; margin-right:15px;">
+        <v-card class="round">
           <v-card-title>
             <h2>점심</h2>
           </v-card-title>
@@ -77,7 +76,7 @@
             </v-card>
           </v-container>
         </v-card>
-        <v-card style="background: #fffef7; float: left; margin-left: 15px; margin-right:15px;">
+        <v-card class="round" style="background: #fffef7;">
           <v-card-title>
             <h2>저녁</h2>
           </v-card-title>
@@ -111,8 +110,8 @@
           </v-container>
         </v-card>
       </div>
-      <div v-else-if="time>=8">
-        <v-card style="float: left; margin-left: 15px; margin-right:15px; margin-right:15px;"> 
+      <div v-else-if="time>=8" style="display: flex;">
+        <v-card class="round"> 
           <v-card-title>
             <h2>아침</h2>
           </v-card-title>
@@ -145,7 +144,7 @@
             </v-card>
           </v-container>
         </v-card>
-        <v-card style="background: #fffef7; float: left; margin-left: 15px; margin-right:15px;">
+        <v-card class="round" style="background: #fffef7;">
           <v-card-title>
             <h2>점심</h2>
           </v-card-title>
@@ -178,7 +177,7 @@
             </v-card>
           </v-container>
         </v-card>
-        <v-card style="float: left; margin-left: 15px; margin-right:15px;">
+        <v-card class="round">
           <v-card-title>
             <h2>저녁</h2>
           </v-card-title>
@@ -212,8 +211,8 @@
           </v-container>
         </v-card>
       </div>
-      <div v-else>
-        <v-card style="background: #fffef7; float: left; margin-left: 15px; margin-right:15px; margin-right:15px;"> 
+      <div v-else style="display: flex;">
+        <v-card class="round" style="background: #fffef7;"> 
           <v-card-title>
             <h2>아침</h2>
           </v-card-title>
@@ -246,12 +245,12 @@
             </v-card>
           </v-container>
         </v-card>
-        <v-card style="float: left; margin-left: 15px; margin-right:15px;">
+        <v-card class="round">
           <v-card-title>
             <h2>점심</h2>
           </v-card-title>
           <v-container column fluid v-if="menus['점심'].length > 1">
-            <v-card class="rounded-card"  v-for="menu in menus['점심']" v-bind:key="menu" min-width="300">
+            <v-card class="rounded-card" v-for="menu in menus['점심']" v-bind:key="menu" min-width="300">
               <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
                 <h3>{{menu}}</h3>
               </v-card-title>
@@ -279,7 +278,7 @@
             </v-card>
           </v-container>
         </v-card>
-        <v-card style="float: left; margin-left: 15px; margin-right:15px;">
+        <v-card class="round">
           <v-card-title>
             <h2>저녁</h2>
           </v-card-title>
@@ -455,5 +454,12 @@ h3 {
 .rounded-card {
   border-radius: 50px;
   margin-bottom: 10px;
+}
+
+.round {
+  border-radius: 30px;
+  float: left;
+  margin-left: 15px;
+  margin-right:15px;
 }
 </style>
