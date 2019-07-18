@@ -9,23 +9,18 @@
       </v-layout>
     </v-layout>
     <v-layout align-center column>
-      <v-item-group v-model="window" class="shrink mr-4" mandatory tag="v-flex">
-        <v-item v-for="n in items" :key="n" style="display: inline-block;" >
-          <div slot-scope="{ active, toggle }">
-            <v-btn :input-value="active" @click="toggle">{{n}}</v-btn>
-          </div>
-        </v-item>
-      </v-item-group>
-
-      <v-flex>
-        <v-window v-model="window" class="elevation-1">
-          <v-window-item v-for="i in items" :key="i">
-            <v-container column fluid v-if="menus[i].length > 1">
-              <v-card class="rounded-card"  v-for="menu in menus[i]" v-bind:key="menu" min-width="300">
-                <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
-                    <h3>{{menu}}</h3>
-                </v-card-title>
-                <v-card-actions class="justify-center">
+      
+      <div v-if="time>=13">
+        <v-card style="float: left; margin-left: 15px; margin-right:15px; margin-left: 15px; margin-right:15px;"> 
+          <v-card-title>
+            <h2>아침</h2>
+          </v-card-title>
+          <v-container column fluid v-if="menus['아침'].length > 1">
+            <v-card class="rounded-card"  v-for="menu in menus['아침']" v-bind:key="menu" min-width="300">
+              <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
+                <h3>{{menu}}</h3>
+              </v-card-title>
+              <v-card-actions class="justify-center">
                   <v-btn icon v-if="account.likes.includes(menu)" @click="postReq(menu, 'like')">
                     <v-icon color="success">thumb_up</v-icon>
                   </v-btn>
@@ -39,18 +34,285 @@
                     <v-icon>thumb_down</v-icon>
                   </v-btn>
                 </v-card-actions>
-              </v-card>
-            </v-container>
-            <v-container column fluid v-else>
-              <v-card class="rounded-card" min-width="300">
-                <v-card-title class="justify-center" primary-title>
-                    <h3>표시할 급식 정보가 없습니다.</h3>
-                </v-card-title>
-              </v-card>
-            </v-container>
-          </v-window-item>
-        </v-window>
-      </v-flex>
+            </v-card>
+          </v-container>
+          <v-container column fluid v-else>
+            <v-card class="rounded-card" min-width="300">
+              <v-card-title class="justify-center" primary-title>
+                  <h3>표시할 급식 정보가 없습니다.</h3>
+              </v-card-title>
+            </v-card>
+          </v-container>
+        </v-card>
+        <v-card style="float: left; margin-left: 15px; margin-right:15px;">
+          <v-card-title>
+            <h2>점심</h2>
+          </v-card-title>
+          <v-container column fluid v-if="menus['점심'].length > 1">
+            <v-card class="rounded-card"  v-for="menu in menus['점심']" v-bind:key="menu" min-width="300">
+              <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
+                <h3>{{menu}}</h3>
+              </v-card-title>
+              <v-card-actions class="justify-center">
+                  <v-btn icon v-if="account.likes.includes(menu)" @click="postReq(menu, 'like')">
+                    <v-icon color="success">thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn v-else icon @click="postReq(menu, 'like')">
+                    <v-icon>thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn icon v-if="account.dislikes.includes(menu)" @click="postReq(menu, 'dislike')">
+                    <v-icon color="error">thumb_down</v-icon>
+                  </v-btn>
+                  <v-btn icon v-else @click="postReq(menu, 'dislike')">
+                    <v-icon>thumb_down</v-icon>
+                  </v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-container>
+          <v-container column fluid v-else>
+            <v-card class="rounded-card" min-width="300">
+              <v-card-title class="justify-center" primary-title>
+                  <h3>표시할 급식 정보가 없습니다.</h3>
+              </v-card-title>
+            </v-card>
+          </v-container>
+        </v-card>
+        <v-card style="background: #fffef7; float: left; margin-left: 15px; margin-right:15px;">
+          <v-card-title>
+            <h2>저녁</h2>
+          </v-card-title>
+          <v-container column fluid v-if="menus['저녁'].length > 1">
+            <v-card class="rounded-card"  v-for="menu in menus['저녁']" v-bind:key="menu" min-width="300">
+              <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
+                <h3>{{menu}}</h3>
+              </v-card-title>
+              <v-card-actions class="justify-center">
+                  <v-btn icon v-if="account.likes.includes(menu)" @click="postReq(menu, 'like')">
+                    <v-icon color="success">thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn v-else icon @click="postReq(menu, 'like')">
+                    <v-icon>thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn icon v-if="account.dislikes.includes(menu)" @click="postReq(menu, 'dislike')">
+                    <v-icon color="error">thumb_down</v-icon>
+                  </v-btn>
+                  <v-btn icon v-else @click="postReq(menu, 'dislike')">
+                    <v-icon>thumb_down</v-icon>
+                  </v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-container>
+          <v-container column fluid v-else>
+            <v-card class="rounded-card" min-width="300">
+              <v-card-title class="justify-center" primary-title>
+                  <h3>표시할 급식 정보가 없습니다.</h3>
+              </v-card-title>
+            </v-card>
+          </v-container>
+        </v-card>
+      </div>
+      <div v-else-if="time>=8">
+        <v-card style="float: left; margin-left: 15px; margin-right:15px; margin-right:15px;"> 
+          <v-card-title>
+            <h2>아침</h2>
+          </v-card-title>
+          <v-container column fluid v-if="menus['아침'].length > 1">
+            <v-card class="rounded-card"  v-for="menu in menus['아침']" v-bind:key="menu" min-width="300">
+              <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
+                <h3>{{menu}}</h3>
+              </v-card-title>
+              <v-card-actions class="justify-center">
+                  <v-btn icon v-if="account.likes.includes(menu)" @click="postReq(menu, 'like')">
+                    <v-icon color="success">thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn v-else icon @click="postReq(menu, 'like')">
+                    <v-icon>thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn icon v-if="account.dislikes.includes(menu)" @click="postReq(menu, 'dislike')">
+                    <v-icon color="error">thumb_down</v-icon>
+                  </v-btn>
+                  <v-btn icon v-else @click="postReq(menu, 'dislike')">
+                    <v-icon>thumb_down</v-icon>
+                  </v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-container>
+          <v-container column fluid v-else>
+            <v-card class="rounded-card" min-width="300">
+              <v-card-title class="justify-center" primary-title>
+                  <h3>표시할 급식 정보가 없습니다.</h3>
+              </v-card-title>
+            </v-card>
+          </v-container>
+        </v-card>
+        <v-card style="background: #fffef7; float: left; margin-left: 15px; margin-right:15px;">
+          <v-card-title>
+            <h2>점심</h2>
+          </v-card-title>
+          <v-container column fluid v-if="menus['점심'].length > 1">
+            <v-card class="rounded-card"  v-for="menu in menus['점심']" v-bind:key="menu" min-width="300">
+              <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
+                <h3>{{menu}}</h3>
+              </v-card-title>
+              <v-card-actions class="justify-center">
+                  <v-btn icon v-if="account.likes.includes(menu)" @click="postReq(menu, 'like')">
+                    <v-icon color="success">thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn v-else icon @click="postReq(menu, 'like')">
+                    <v-icon>thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn icon v-if="account.dislikes.includes(menu)" @click="postReq(menu, 'dislike')">
+                    <v-icon color="error">thumb_down</v-icon>
+                  </v-btn>
+                  <v-btn icon v-else @click="postReq(menu, 'dislike')">
+                    <v-icon>thumb_down</v-icon>
+                  </v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-container>
+          <v-container column fluid v-else>
+            <v-card class="rounded-card" min-width="300">
+              <v-card-title class="justify-center" primary-title>
+                  <h3>표시할 급식 정보가 없습니다.</h3>
+              </v-card-title>
+            </v-card>
+          </v-container>
+        </v-card>
+        <v-card style="float: left; margin-left: 15px; margin-right:15px;">
+          <v-card-title>
+            <h2>저녁</h2>
+          </v-card-title>
+          <v-container column fluid v-if="menus['저녁'].length > 1">
+            <v-card class="rounded-card"  v-for="menu in menus['저녁']" v-bind:key="menu" min-width="300">
+              <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
+                <h3>{{menu}}</h3>
+              </v-card-title>
+              <v-card-actions class="justify-center">
+                  <v-btn icon v-if="account.likes.includes(menu)" @click="postReq(menu, 'like')">
+                    <v-icon color="success">thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn v-else icon @click="postReq(menu, 'like')">
+                    <v-icon>thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn icon v-if="account.dislikes.includes(menu)" @click="postReq(menu, 'dislike')">
+                    <v-icon color="error">thumb_down</v-icon>
+                  </v-btn>
+                  <v-btn icon v-else @click="postReq(menu, 'dislike')">
+                    <v-icon>thumb_down</v-icon>
+                  </v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-container>
+          <v-container column fluid v-else>
+            <v-card class="rounded-card" min-width="300">
+              <v-card-title class="justify-center" primary-title>
+                  <h3>표시할 급식 정보가 없습니다.</h3>
+              </v-card-title>
+            </v-card>
+          </v-container>
+        </v-card>
+      </div>
+      <div v-else>
+        <v-card style="background: #fffef7; float: left; margin-left: 15px; margin-right:15px; margin-right:15px;"> 
+          <v-card-title>
+            <h2>아침</h2>
+          </v-card-title>
+          <v-container column fluid v-if="menus['아침'].length > 1">
+            <v-card class="rounded-card"  v-for="menu in menus['아침']" v-bind:key="menu" min-width="300">
+              <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
+                <h3>{{menu}}</h3>
+              </v-card-title>
+              <v-card-actions class="justify-center">
+                  <v-btn icon v-if="account.likes.includes(menu)" @click="postReq(menu, 'like')">
+                    <v-icon color="success">thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn v-else icon @click="postReq(menu, 'like')">
+                    <v-icon>thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn icon v-if="account.dislikes.includes(menu)" @click="postReq(menu, 'dislike')">
+                    <v-icon color="error">thumb_down</v-icon>
+                  </v-btn>
+                  <v-btn icon v-else @click="postReq(menu, 'dislike')">
+                    <v-icon>thumb_down</v-icon>
+                  </v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-container>
+          <v-container column fluid v-else>
+            <v-card class="rounded-card" min-width="300">
+              <v-card-title class="justify-center" primary-title>
+                  <h3>표시할 급식 정보가 없습니다.</h3>
+              </v-card-title>
+            </v-card>
+          </v-container>
+        </v-card>
+        <v-card style="float: left; margin-left: 15px; margin-right:15px;">
+          <v-card-title>
+            <h2>점심</h2>
+          </v-card-title>
+          <v-container column fluid v-if="menus['점심'].length > 1">
+            <v-card class="rounded-card"  v-for="menu in menus['점심']" v-bind:key="menu" min-width="300">
+              <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
+                <h3>{{menu}}</h3>
+              </v-card-title>
+              <v-card-actions class="justify-center">
+                  <v-btn icon v-if="account.likes.includes(menu)" @click="postReq(menu, 'like')">
+                    <v-icon color="success">thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn v-else icon @click="postReq(menu, 'like')">
+                    <v-icon>thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn icon v-if="account.dislikes.includes(menu)" @click="postReq(menu, 'dislike')">
+                    <v-icon color="error">thumb_down</v-icon>
+                  </v-btn>
+                  <v-btn icon v-else @click="postReq(menu, 'dislike')">
+                    <v-icon>thumb_down</v-icon>
+                  </v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-container>
+          <v-container column fluid v-else>
+            <v-card class="rounded-card" min-width="300">
+              <v-card-title class="justify-center" primary-title>
+                  <h3>표시할 급식 정보가 없습니다.</h3>
+              </v-card-title>
+            </v-card>
+          </v-container>
+        </v-card>
+        <v-card style="float: left; margin-left: 15px; margin-right:15px;">
+          <v-card-title>
+            <h2>저녁</h2>
+          </v-card-title>
+          <v-container column fluid v-if="menus['저녁'].length > 1">
+            <v-card class="rounded-card"  v-for="menu in menus['저녁']" v-bind:key="menu" min-width="300">
+              <v-card-title class="justify-center" @click="moveTo(menu)" primary-title>
+                <h3>{{menu}}</h3>
+              </v-card-title>
+              <v-card-actions class="justify-center">
+                  <v-btn icon v-if="account.likes.includes(menu)" @click="postReq(menu, 'like')">
+                    <v-icon color="success">thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn v-else icon @click="postReq(menu, 'like')">
+                    <v-icon>thumb_up</v-icon>
+                  </v-btn>
+                  <v-btn icon v-if="account.dislikes.includes(menu)" @click="postReq(menu, 'dislike')">
+                    <v-icon color="error">thumb_down</v-icon>
+                  </v-btn>
+                  <v-btn icon v-else @click="postReq(menu, 'dislike')">
+                    <v-icon>thumb_down</v-icon>
+                  </v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-container>
+          <v-container column fluid v-else>
+            <v-card class="rounded-card" min-width="300">
+              <v-card-title class="justify-center" primary-title>
+                  <h3>표시할 급식 정보가 없습니다.</h3>
+              </v-card-title>
+            </v-card>
+          </v-container>
+        </v-card>
+      </div>
       <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="timeout" top>
         {{text}}
       </v-snackbar>
@@ -85,7 +347,8 @@ export default {
         'second': null,
         'total': null
       },
-      nextMealIndex: 0
+      nextMealIndex: 0,
+      time:0
     }
   },
   mounted () {
@@ -98,7 +361,7 @@ export default {
       var today = this.now
       var hours = today.getHours()
       var minutes = today.getMinutes()
-
+      this.time=hours
       for (var i = 0; i < this.standard.length; i++) {
         if (hours * 60 + minutes <= this.standard[i]) {
           return i
@@ -147,12 +410,11 @@ export default {
     },
     setStdDate (nextDay = false) {
       if (nextDay) {
-        for (var i = 0; i < this.standard.length; i++) {
+        for (let i = 0; i < this.standard.length; i++) {
           this.stdDate[i].setDate(this.stdDate[i].getDate() + 1)
         }
-      }
-      else {
-        for (var i = 0; i < this.standard.length; i++) {
+      } else {
+        for (let i = 0; i < this.standard.length; i++) {
           this.stdDate[i] = new Date(
             this.now.getFullYear(),
             this.now.getMonth(),
