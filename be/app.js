@@ -3,15 +3,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-const passport = require("passport");
-const flash = require("flash");
 require("dotenv").config();
 
 const Menu = require('./models/menu').menuSchema;
-const passportGoogle = require("./passport/googleStrategy");
 
 const app = express();
-passportGoogle();
 
 app.use(cors());
 app.use(express.json());
@@ -30,8 +26,6 @@ app.use(
     secret: process.env.COOKIE_SECRET
   })
 );
-app.use(passport.initialize());
-app.use(passport.session());
 app.use('/', require('./routes/index'));
 
 mongoose.set('useCreateIndex', true);

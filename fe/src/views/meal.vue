@@ -1,6 +1,14 @@
 <template>
   <v-container fluid>
     <v-layout align-center column>
+      <v-layout align-center>
+        <h1>다음 식사까지...</h1>
+      </v-layout>
+      <v-layout align-center column>
+        <h2>{{ delta.hour }}시간 {{ delta.minute }}분 {{ delta.second }}초</h2>
+      </v-layout>
+    </v-layout>
+    <v-layout align-center column>
       <v-item-group v-model="window" class="shrink mr-4" mandatory tag="v-flex">
         <v-item v-for="n in items" :key="n" style="display: inline-block;" >
           <div slot-scope="{ active, toggle }">
@@ -67,27 +75,36 @@ export default {
       snackbar: false,
       timeout: 3000,
       snackbarColor: '',
-      text: ''
+      text: '',
+      standard: [480, 750, 1110],
+      stdDate: [null, null, null],
+      now: this.setNow(),
+      delta: {
+        'hour': null,
+        'minute': null,
+        'second': null,
+        'total': null
+      },
+      nextMealIndex: 0
     }
   },
   mounted () {
     this.getMeals()
-    this.setMeal()
+    this.window = this.setMeal()
+    this.setStdDate()
   },
   methods: {
     setMeal () {
-      const standard = [480, 750, 1110]
-
-      var today = new Date()
+      var today = this.now
       var hours = today.getHours()
       var minutes = today.getMinutes()
 
-      for (var i = 0; i < standard.length; i++) {
-        if (hours * 60 + minutes <= standard[i]) {
-          this.window = i
-          break
+      for (var i = 0; i < this.standard.length; i++) {
+        if (hours * 60 + minutes <= this.standard[i]) {
+          return i
         }
       }
+      return 0
     },
     getMeals () {
       this.$http.get(this.url + '/meal')
@@ -127,6 +144,42 @@ export default {
         this.text = '추천, 비추천 기능은 로그인 후에 가능합니다'
         this.snackbar = true
       }
+    },
+    setStdDate (nextDay = false) {
+      if (nextDay) {
+        for (var i = 0; i < this.standard.length; i++) {
+          this.stdDate[i].setDate(this.stdDate[i].getDate() + 1)
+        }
+      }
+      else {
+        for (var i = 0; i < this.standard.length; i++) {
+          this.stdDate[i] = new Date(
+            this.now.getFullYear(),
+            this.now.getMonth(),
+            this.now.getDate(),
+            parseInt(this.standard[i] / 60),
+            this.standard[i] % 60
+          )
+        }
+      }
+    },
+    setNow () {
+      setInterval(() => {
+        this.now = new Date()
+        this.window = this.setMeal()
+
+        if (this.now > this.stdDate[2]) {
+          this.setStdDate(true)
+        } else {
+          var sec = (this.stdDate[this.setMeal()] - this.now) / 1000
+          this.delta.hour = parseInt(sec / 60 / 60)
+          this.delta.minute = parseInt(sec / 60 % 60)
+          this.delta.second = parseInt(sec % 60)
+          this.delta.total = sec
+        }
+      }, 1000)
+
+      return new Date()
     }
   }
 }
