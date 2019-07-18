@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-layout align-center column>
       <v-layout align-center>
-        <h1>다음 식사까지...</h1>
+        <h1>다음 {{ items[setMeal()] }} 식사까지...</h1>
       </v-layout>
       <v-layout align-center column>
         <h2>{{ delta.hour }}시간 {{ delta.minute }}분 {{ delta.second }}초</h2>
@@ -147,12 +147,11 @@ export default {
     },
     setStdDate (nextDay = false) {
       if (nextDay) {
-        for (var i = 0; i < this.standard.length; i++) {
+        for (let i = 0; i < this.standard.length; i++) {
           this.stdDate[i].setDate(this.stdDate[i].getDate() + 1)
         }
-      }
-      else {
-        for (var i = 0; i < this.standard.length; i++) {
+      } else {
+        for (let i = 0; i < this.standard.length; i++) {
           this.stdDate[i] = new Date(
             this.now.getFullYear(),
             this.now.getMonth(),
@@ -166,7 +165,7 @@ export default {
     setNow () {
       setInterval(() => {
         this.now = new Date()
-        this.window = this.setMeal()
+        // this.window = this.setMeal()
 
         if (this.now > this.stdDate[2]) {
           this.setStdDate(true)
